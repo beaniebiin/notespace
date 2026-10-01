@@ -1,0 +1,5 @@
+{
+  "name": "NoteSpace",
+  "description": "A self-hosted, Markdown-based knowledge management system inspired by Notion, featuring Gemini AI assistance.",
+  "requestFramePermissions": []
+}

@@ -1,0 +1,2012 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #4b5563;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Tiptap Editor Styles */
+.ProseMirror {
+  outline: none;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.dark .ProseMirror p.is-editor-empty:first-child::before {
+  color: #6b7280;
+}
+
+/* Website Block Styles */
+.website-block-component {
+  user-select: none;
+}
+
+/* Dark Mode Overrides for Tiptap Content */
+.dark body {
+  color: #e5e7eb;
+  /* gray-200 */
+  background-color: #111827;
+  /* gray-900 */
+}
+
+/* Typography Overrides */
+.tiptap {
+  font-size: 1.1rem;
+}
+
+      /* Base text colors: body #292929, headings #191919 */
+      .tiptap,
+      .notion-markdown-body {
+        color: #292929;
+      }
+      .tiptap h1,
+      .tiptap h2,
+      .tiptap h3,
+      .tiptap h4,
+      .tiptap h5,
+      .tiptap h6,
+      .notion-markdown-body h1,
+      .notion-markdown-body h2,
+      .notion-markdown-body h3,
+      .notion-markdown-body h4,
+      .notion-markdown-body h5,
+      .notion-markdown-body h6 {
+        color: #191919;
+      }
+.tiptap p {
+  margin-bottom: 0.25rem;
+  margin-top: 0.25rem;
+  font-weight: 400;
+}
+
+.tiptap li>p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.tiptap h1 {
+  font-size: 2.6rem;
+  font-weight: 900;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.tiptap h2 {
+  font-size: 2.3rem;
+  font-weight: 800;
+  margin-top: 1.8rem;
+  margin-bottom: 0.8rem;
+  line-height: 1.3;
+}
+
+.tiptap h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 0.7rem;
+  line-height: 1.4;
+}
+
+.tiptap h4 {
+  font-size: 1.7rem;
+  font-weight: 600;
+  margin-top: 1.2rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.tiptap h5 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.tiptap h6 {
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.dark .tiptap {
+  color: #e5e7eb;
+}
+
+.dark .tiptap p,
+.dark .tiptap span,
+.dark .tiptap li,
+.dark .tiptap ul,
+.dark .tiptap ol,
+.dark .tiptap div {
+  color: #e5e7eb;
+}
+
+.dark .tiptap strong,
+.dark .tiptap b {
+  color: #f9fafb;
+}
+
+.dark .tiptap em,
+.dark .tiptap i {
+  color: #f3f4f6;
+}
+
+.dark .tiptap h1,
+.dark .tiptap h2,
+.dark .tiptap h3,
+.dark .tiptap h4,
+.dark .tiptap h5,
+.dark .tiptap h6 {
+  color: #f3f4f6;
+  /* gray-100 */
+}
+
+.dark .tiptap a {
+  color: #60a5fa;
+  /* blue-400 */
+}
+
+.dark .tiptap a:hover {
+  color: #93c5fd;
+  /* blue-300 */
+}
+
+.dark .tiptap blockquote {
+  border-color: #9ca3af;
+  border-left-color: #4b5563;
+  background-color: #1f2937;
+  color: #e5e7eb;
+}
+
+.dark .tiptap pre,
+.dark .notion-markdown-body pre {
+  background: #1f2937;
+  /* gray-800 */
+  color: #e5e7eb;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif !important;
+  font-size: 1.05rem !important;
+  font-weight: 300 !important;
+  line-height: 1.6 !important;
+}
+
+.dark .tiptap pre code,
+.dark .notion-markdown-body pre code {
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif !important;
+  font-size: 1.05rem !important;
+  font-weight: 300 !important;
+  line-height: 1.6 !important;
+}
+
+.dark .tiptap code {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fca5a5;
+  /* red-300 */
+}
+
+.dark .tiptap details {
+  border-color: #374151;
+  /* gray-700 */
+  background: #1f2937;
+  /* gray-800 */
+}
+
+.dark .tiptap details[open] {
+  background: #374151;
+  /* gray-700 */
+}
+
+.dark .tiptap hr {
+  border-top-color: #374151;
+  /* gray-700 */
+}
+
+.dark .tiptap ul[data-type="taskList"] li[data-type="taskItem"]>label input {
+  accent-color: #60a5fa;
+}
+
+/* Checklist / TaskList Styles (Tiptap & Markdown) */
+.tiptap ul[data-type="taskList"],
+ul[data-type="taskList"],
+.notion-markdown-body ul.contains-task-list,
+ul.contains-task-list {
+  list-style: none !important;
+  padding-left: 0 !important;
+  margin: 0.35rem 0 !important;
+}
+
+.tiptap ul[data-type="taskList"] li[data-type="taskItem"],
+ul[data-type="taskList"] li[data-type="taskItem"],
+.notion-markdown-body li.task-list-item,
+li.task-list-item {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  margin-bottom: 0.35rem !important;
+  list-style: none !important;
+}
+
+.tiptap ul[data-type="taskList"] li[data-type="taskItem"] > label,
+ul[data-type="taskList"] li[data-type="taskItem"] > label {
+  flex: 0 0 auto !important;
+  margin-right: 0.6rem !important;
+  user-select: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  cursor: pointer !important;
+}
+
+.tiptap ul[data-type="taskList"] li[data-type="taskItem"] > div,
+ul[data-type="taskList"] li[data-type="taskItem"] > div,
+.notion-markdown-body li.task-list-item > div {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.tiptap ul[data-type="taskList"] li[data-type="taskItem"] p,
+ul[data-type="taskList"] li[data-type="taskItem"] p,
+.notion-markdown-body li.task-list-item p {
+  margin: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: 0 !important;
+  line-height: 1.5 !important;
+}
+
+.tiptap ul[data-type="taskList"] li[data-type="taskItem"] input[type="checkbox"],
+.notion-markdown-body li.task-list-item input[type="checkbox"] {
+  width: 1.15rem !important;
+  height: 1.15rem !important;
+  cursor: pointer !important;
+  margin: 0 !important;
+  accent-color: #2563eb !important;
+}
+
+
+/* Colored Backgrounds for Headings and Blockquotes */
+.colored-bg-purple {
+  background-color: #fff6ff !important;
+  color: #292929 !important;
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.4rem;
+}
+
+.dark .colored-bg-purple {
+  background-color: #261733 !important;
+  color: #f3f4f6 !important;
+}
+
+.colored-bg-gray {
+  background-color: #f6f6f6 !important;
+  color: #292929 !important;
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.4rem;
+}
+
+.dark .colored-bg-gray {
+  background-color: #242c38 !important;
+  color: #f3f4f6 !important;
+}
+
+.colored-bg-blue {
+  background-color: #f6f6ff !important;
+  color: #292929 !important;
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.4rem;
+}
+
+.dark .colored-bg-blue {
+  background-color: #162033 !important;
+  color: #f3f4f6 !important;
+}
+
+.colored-bg-green {
+  background-color: #f6fff6 !important;
+  color: #292929 !important;
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.4rem;
+}
+
+.dark .colored-bg-green {
+  background-color: #13261d !important;
+  color: #f3f4f6 !important;
+}
+
+.colored-bg-yellow {
+  background-color: #fffff6 !important;
+  color: #292929 !important;
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.4rem;
+}
+
+.dark .colored-bg-yellow {
+  background-color: #2c2414 !important;
+  color: #f3f4f6 !important;
+}
+
+.colored-bg-red {
+  background-color: #fff6f6 !important;
+  color: #292929 !important;
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.4rem;
+}
+
+.dark .colored-bg-red {
+  background-color: #2d181c !important;
+  color: #f3f4f6 !important;
+}
+
+.dark .colored-bg-purple *,
+.dark .colored-bg-gray *,
+.dark .colored-bg-blue *,
+.dark .colored-bg-green *,
+.dark .colored-bg-yellow *,
+.dark .colored-bg-red * {
+  color: inherit !important;
+}
+
+/* Blockquote Padding & Colored Borders */
+.tiptap blockquote.colored-bg-purple,
+.notion-markdown-body blockquote.colored-bg-purple {
+  padding: 0.5rem 1rem;
+  background-color: var(--hl-q-purple) !important;
+  border-left: 4px solid rgb(255, 200, 255) !important;
+}
+
+.tiptap blockquote.colored-bg-gray,
+.notion-markdown-body blockquote.colored-bg-gray {
+  padding: 0.5rem 1rem;
+  background-color: var(--hl-q-gray) !important;
+  border-left: 4px solid #9ca3af !important;
+}
+
+.tiptap blockquote.colored-bg-blue,
+.notion-markdown-body blockquote.colored-bg-blue {
+  padding: 0.5rem 1rem;
+  background-color: var(--hl-q-blue) !important;
+  border-left: 4px solid rgb(200, 200, 255) !important;
+}
+
+.tiptap blockquote.colored-bg-green,
+.notion-markdown-body blockquote.colored-bg-green {
+  padding: 0.5rem 1rem;
+  background-color: var(--hl-q-green) !important;
+  border-left: 4px solid #bceabc !important;
+}
+
+.tiptap blockquote.colored-bg-yellow,
+.notion-markdown-body blockquote.colored-bg-yellow {
+  padding: 0.5rem 1rem;
+  background-color: var(--hl-q-yellow) !important;
+  border-left: 4px solid #f0f041 !important;
+}
+
+.tiptap blockquote.colored-bg-red,
+.notion-markdown-body blockquote.colored-bg-red {
+  padding: 0.5rem 1rem;
+  background-color: var(--hl-q-red) !important;
+  border-left: 4px solid rgb(255, 200, 200) !important;
+}
+
+.dark .tiptap blockquote.colored-bg-purple,
+.dark .notion-markdown-body blockquote.colored-bg-purple {
+  border-left-color: rgb(255, 200, 255) !important;
+}
+
+.dark .tiptap blockquote.colored-bg-gray,
+.dark .notion-markdown-body blockquote.colored-bg-gray {
+  border-left-color: #9ca3af !important;
+}
+
+.dark .tiptap blockquote.colored-bg-blue,
+.dark .notion-markdown-body blockquote.colored-bg-blue {
+  border-left-color: rgb(200, 200, 255) !important;
+}
+
+.dark .tiptap blockquote.colored-bg-green,
+.dark .notion-markdown-body blockquote.colored-bg-green {
+  border-left: 4px solid #bceabc !important;
+}
+
+.dark .tiptap blockquote.colored-bg-yellow,
+.dark .notion-markdown-body blockquote.colored-bg-yellow {
+  border-left: 4px solid #f0f041 !important;
+}
+
+.dark .tiptap blockquote.colored-bg-red,
+.dark .notion-markdown-body blockquote.colored-bg-red {
+  border-left-color: rgb(255, 200, 200) !important;
+}
+
+/* Table Styles */
+.tiptap .tableWrapper,
+.notion-markdown-body .tableWrapper,
+.tableWrapper {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 1rem 0;
+  border-radius: 0.375rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.tiptap table,
+.notion-markdown-body table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  min-width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.tiptap td,
+.tiptap th {
+  min-width: 1em;
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.tiptap th:not([data-bg]) {
+  font-weight: 600;
+  text-align: left;
+  background-color: #f9fafb;
+}
+
+/* Table Typography: 기본 글씨 (1.15rem, 굵기 400) */
+.tiptap table td,
+.tiptap table th,
+.tiptap table td p,
+.tiptap table th p,
+.notion-markdown-body table td,
+.notion-markdown-body table th,
+.notion-markdown-body table td p,
+.notion-markdown-body table th p {
+  font-size: 1.15rem !important;
+  font-weight: 400 !important;
+  line-height: 1.5;
+}
+
+/* Table Typography: 작은 글씨 (1.05rem, 굵기 300) */
+.tiptap table.table-sm td,
+.tiptap table.table-sm th,
+.tiptap table.table-sm td p,
+.tiptap table.table-sm th p,
+.tiptap table.table-sm td *,
+.tiptap table.table-sm th *,
+.notion-markdown-body table.table-sm td,
+.notion-markdown-body table.table-sm th,
+.notion-markdown-body table.table-sm td p,
+.notion-markdown-body table.table-sm th p,
+.notion-markdown-body table.table-sm td *,
+.notion-markdown-body table.table-sm th *,
+.tiptap table[data-font-size="small"] td,
+.tiptap table[data-font-size="small"] th,
+.tiptap table[data-font-size="small"] td p,
+.tiptap table[data-font-size="small"] th p,
+.tiptap table[data-font-size="small"] td *,
+.tiptap table[data-font-size="small"] th *,
+.notion-markdown-body table[data-font-size="small"] td,
+.notion-markdown-body table[data-font-size="small"] th,
+.notion-markdown-body table[data-font-size="small"] td p,
+.notion-markdown-body table[data-font-size="small"] th p,
+.notion-markdown-body table[data-font-size="small"] td *,
+.notion-markdown-body table[data-font-size="small"] th *,
+.tiptap table td.table-sm,
+.tiptap table th.table-sm,
+.tiptap table td.table-sm p,
+.tiptap table th.table-sm p,
+.tiptap table td.table-sm *,
+.tiptap table th.table-sm *,
+.notion-markdown-body table td.table-sm,
+.notion-markdown-body table th.table-sm,
+.notion-markdown-body table td.table-sm p,
+.notion-markdown-body table th.table-sm p,
+.notion-markdown-body table td.table-sm *,
+.notion-markdown-body table th.table-sm *,
+.tiptap table td[data-font-size="small"],
+.tiptap table th[data-font-size="small"],
+.tiptap table td[data-font-size="small"] p,
+.tiptap table th[data-font-size="small"] p,
+.tiptap table td[data-font-size="small"] *,
+.tiptap table th[data-font-size="small"] *,
+.notion-markdown-body table td[data-font-size="small"],
+.notion-markdown-body table th[data-font-size="small"],
+.notion-markdown-body table td[data-font-size="small"] p,
+.notion-markdown-body table th[data-font-size="small"] p,
+.notion-markdown-body table td[data-font-size="small"] *,
+.notion-markdown-body table th[data-font-size="small"] * {
+  font-size: 1.05rem !important;
+  font-weight: 300 !important;
+  line-height: 1.5 !important;
+}
+
+/* Table Vertical Alignment */
+.tiptap td[data-valign="top"],
+.tiptap th[data-valign="top"],
+.notion-markdown-body td[data-valign="top"],
+.notion-markdown-body th[data-valign="top"],
+td[data-valign="top"],
+th[data-valign="top"] {
+  vertical-align: top !important;
+}
+
+.tiptap td[data-valign="middle"],
+.tiptap th[data-valign="middle"],
+.notion-markdown-body td[data-valign="middle"],
+.notion-markdown-body th[data-valign="middle"],
+td[data-valign="middle"],
+th[data-valign="middle"] {
+  vertical-align: middle !important;
+}
+
+.tiptap td[data-valign="bottom"],
+.tiptap th[data-valign="bottom"],
+.notion-markdown-body td[data-valign="bottom"],
+.notion-markdown-body th[data-valign="bottom"],
+td[data-valign="bottom"],
+th[data-valign="bottom"] {
+  vertical-align: bottom !important;
+}
+
+.tiptap .selectedCell:after {
+  z-index: 2;
+  position: absolute;
+  content: "";
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(59, 130, 246, 0.1);
+  pointer-events: none;
+}
+
+.tiptap .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: -2px;
+  width: 4px;
+  background-color: #3b82f6;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Sticky header stacking: TopBar(top-0) + toolbar(top-12), 노치 safe-area 반영 */
+@supports (top: env(safe-area-inset-top)) {
+  .topbar-sticky {
+    top: env(safe-area-inset-top, 0px);
+  }
+
+  .toolbar-sticky {
+    top: calc(3rem + env(safe-area-inset-top, 0px));
+  }
+}
+
+/* 좁은 화면 표 반응형: 표 래퍼 안에서만 가로 스크롤, 에디터 전체로 번지지 않음 */
+@media (max-width: 640px) {
+  .tiptap table,
+  .notion-markdown-body table {
+    table-layout: auto !important;
+    width: max-content !important;
+    min-width: 100% !important;
+    max-width: none !important;
+  }
+
+  .tiptap td,
+  .tiptap th,
+  .notion-markdown-body td,
+  .notion-markdown-body th {
+    min-width: 110px;
+    overflow-wrap: break-word;
+    word-break: keep-all;
+  }
+}
+
+.tiptap.resize-cursor {
+  cursor: col-resize;
+}
+
+/* Dark mode table styles */
+.dark .tiptap table {
+  border-color: #4b5563;
+}
+
+.dark .tiptap td,
+.dark .tiptap th {
+  border-color: #4b5563;
+}
+
+.dark .tiptap td:not([data-bg]),
+.dark .tiptap th:not([data-bg]) {
+  color: #e5e7eb;
+}
+
+.dark .tiptap th:not([data-bg]) {
+  background-color: #1f2937;
+}
+
+.dark .tiptap .selectedCell:after {
+  background: rgba(96, 165, 250, 0.15);
+}
+
+.dark .tiptap td[data-bg],
+.dark .tiptap th[data-bg],
+.dark .tiptap td[style*="background-color"],
+.dark .tiptap th[style*="background-color"],
+.dark .notion-markdown-body td[style*="background-color"],
+.dark .notion-markdown-body th[style*="background-color"] {
+  color: #ffffff !important;
+}
+
+.dark .tiptap td[data-bg] *,
+.dark .tiptap th[data-bg] *,
+.dark .tiptap td[style*="background-color"] *,
+.dark .tiptap th[style*="background-color"] *,
+.dark .notion-markdown-body td[style*="background-color"] *,
+.dark .notion-markdown-body th[style*="background-color"] * {
+  color: #ffffff !important;
+}
+
+/* Underline (밑줄) Styling: Offset 3.1px, Thickness 1.1px, Light 19% / Dark 25% */
+.tiptap u,
+.notion-markdown-body u,
+u {
+  text-decoration: underline;
+  text-decoration-color: rgba(0, 0, 0, 0.19) !important;
+  text-underline-offset: 3.1px !important;
+  text-decoration-thickness: 1.1px !important;
+}
+
+.dark .tiptap u,
+.dark .notion-markdown-body u,
+.dark u {
+  text-decoration-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Table cell text alignment support */
+.tiptap td[align="left"],
+.tiptap th[align="left"] {
+  text-align: left !important;
+}
+
+.tiptap td[align="center"],
+.tiptap th[align="center"] {
+  text-align: center !important;
+}
+
+.tiptap td[align="right"],
+.tiptap th[align="right"] {
+  text-align: right !important;
+}
+
+/* Question Explanation Block Typography */
+.question-explanation-title {
+  font-size: 0.9rem !important;
+  line-height: 1.4;
+}
+
+.question-explanation-body {
+  font-size: 0.8rem !important;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Print / Export PDF Styles */
+/* Overrides imported from index.php */
+      /* cspell:disable-file */
+      html {
+        -webkit-print-color-adjust: exact;
+      }
+      * {
+        box-sizing: border-box;
+        -webkit-print-color-adjust: exact;
+      }
+
+      html,
+      body {
+
+        padding: 0;
+        height: 100%;
+        overflow: hidden; /* Prevent body scroll */
+      }
+      
+      body {
+        line-height: 1.6;
+        color: rgb(55, 53, 47);
+        font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+        font-weight: 400;
+      }
+
+      /* Scrollbar styling */
+      ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(55, 53, 47, 0.16);
+        border-radius: 5px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      .tiptap a {
+        color: inherit;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      .tiptap a:hover {
+        color: #2383e2;
+      }
+
+      /* Headings - Reference Image match */
+      .tiptap h1, .tiptap h2, .tiptap h3, .tiptap h4, .tiptap h5, .tiptap h6 {
+        letter-spacing: -0.02em;
+        line-height: 1.25;
+        margin-bottom: 0.4rem;
+        color: rgb(55, 53, 47);
+        padding: 0.25rem 0.5rem;
+      }
+      .tiptap h1 { font-size: 2.8rem !important; margin-top: 2rem !important; font-weight: 900 !important; background: #e5e5e5; border-radius: 4px; }
+      .tiptap h2 { font-size: 2.2rem !important; margin-top: 2rem !important; font-weight: 800 !important; background: #eeeeee; border-radius: 4px; }
+      .tiptap h3 { font-size: 1.8rem !important; margin-top: 1.5rem !important; font-weight: 700 !important; background: #f5f5f5; border-radius: 4px; }
+      .tiptap h4 { font-size: 1.5rem !important; margin-top: 1.5rem !important; font-weight: 600 !important; padding: 0.25rem 0; }
+      .tiptap h5 { font-size: 1.3rem !important; margin-top: 1.3rem !important; font-weight: 500 !important; padding: 0.25rem 0; }
+      .tiptap h6 { font-size: 1.15rem !important; margin-top: 1.3rem !important; font-weight: 500 !important; padding: 0.25rem 0; }
+
+      .tiptap p { font-size: 1.15rem !important; font-weight: 400 !important; line-height: 1.6; padding-bottom: 0.3em; padding-top: 0.3em; padding-left: 0.2em; }
+
+      /* List Hierarchy: I, 1, 1) */
+      .tiptap ol {
+        list-style-type: upper-roman; /* Level 1: I, II, III */
+        padding-left: 1.5em;
+        margin: 0.5em 0;
+      }
+      .tiptap ol ol {
+        list-style-type: decimal; /* Level 2: 1, 2, 3 */
+        margin: 0;
+      }
+      .tiptap ol ol ol {
+        list-style-type: none; /* Level 3: custom */
+        counter-reset: item;
+        margin: 0;
+      }
+      .tiptap ol ol ol > li {
+        position: relative;
+      }
+      .tiptap ol ol ol > li:before {
+        content: counter(item) ") ";
+        counter-increment: item;
+        position: absolute;
+        left: -1.5em;
+        color: rgb(55, 53, 47);
+      }
+
+      .tiptap ul {
+        list-style-type: disc;
+        padding-left: 1.5em;
+        margin: 0.5em 0;
+      }
+      .tiptap ul ul { list-style-type: circle; margin: 0; }
+      .tiptap ul ul ul { list-style-type: square; margin: 0; }
+      .tiptap ol ul, .tiptap ul ol { margin: 0; }
+
+      /* Task Lists */
+      .tiptap ul[data-type="taskList"] {
+        list-style: none !important;
+        padding-left: 0 !important;
+      }
+      .tiptap ul[data-type="taskList"] li[data-type="taskItem"] {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        margin-bottom: 0.35rem !important;
+      }
+      .tiptap ul[data-type="taskList"] li[data-type="taskItem"] > label {
+        margin-right: 0.6rem !important;
+        user-select: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 1.25rem !important;
+        height: 1.25rem !important;
+        flex-shrink: 0 !important;
+        cursor: pointer !important;
+      }
+      .tiptap ul[data-type="taskList"] li[data-type="taskItem"] > div {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .tiptap ul[data-type="taskList"] li[data-type="taskItem"] p {
+        margin: 0 !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        padding-left: 0 !important;
+        line-height: 1.5 !important;
+      }
+
+      /* Blockquotes - Match reference image */
+      .tiptap blockquote {
+        font-size: 1.15rem;
+        margin: 1em 0;
+        padding: 12px 16px;
+        border-left: 4px solid #6b7280;
+        background: #f9f9f9;
+        color: inherit;
+      }
+
+      /* Toggles */
+      .tiptap details {
+        margin: 0.8em 0;
+        padding: 0.5em 0.8em;
+        border: 1px solid rgba(55, 53, 47, 0.09);
+        border-radius: 4px;
+        background: rgba(247, 246, 243, 0.25);
+        transition: background 0.2s;
+      }
+      .tiptap details[open] {
+        background: rgba(247, 246, 243, 0.15);
+        padding-bottom: 1em;
+      }
+      .tiptap details p {
+        color: #444 !important;
+        font-size: 1rem !important;
+        font-weight: 300 !important;
+      }
+      .tiptap summary {
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 1.1em;
+        margin-bottom: 0.2em;
+        list-style: none;
+        outline: none;
+      }
+      .tiptap summary:hover {
+        color: #2383e2;
+      }
+      /* Standardizing content inside details */
+      .tiptap details > *:not(summary) {
+        margin-top: 0.5em;
+      }
+
+      /* Dark Mode Overrides for Headings, Blockquotes, Details, Lists */
+      .dark .tiptap h1, 
+      .dark .tiptap h2, 
+      .dark .tiptap h3, 
+      .dark .tiptap h4, 
+      .dark .tiptap h5, 
+      .dark .tiptap h6 {
+        color: #f3f4f6 !important;
+      }
+      .dark .tiptap h1:not([class*="colored-bg-"]) {
+        background-color: #1e293b !important;
+        color: #f3f4f6 !important;
+      }
+      .dark .tiptap h2:not([class*="colored-bg-"]) {
+        background-color: #1f2937 !important;
+        color: #f3f4f6 !important;
+      }
+      .dark .tiptap h3:not([class*="colored-bg-"]) {
+        background-color: #1a2234 !important;
+        color: #f3f4f6 !important;
+      }
+      .dark .tiptap h4:not([class*="colored-bg-"]),
+      .dark .tiptap h5:not([class*="colored-bg-"]),
+      .dark .tiptap h6:not([class*="colored-bg-"]) {
+        background-color: transparent !important;
+        color: #f3f4f6 !important;
+      }
+
+      .dark .tiptap {
+        color: #e5e7eb !important;
+      }
+      .dark .tiptap p {
+        color: #e5e7eb !important;
+      }
+      .dark .tiptap span {
+        color: inherit;
+      }
+      .dark .tiptap li {
+        color: #e5e7eb !important;
+      }
+      .dark .tiptap li p {
+        color: #e5e7eb !important;
+      }
+      .dark .tiptap ul, .dark .tiptap ol {
+        color: #e5e7eb !important;
+      }
+      .dark .tiptap strong, .dark .tiptap b {
+        color: #f9fafb !important;
+      }
+      .dark .tiptap em, .dark .tiptap i {
+        color: #f3f4f6 !important;
+      }
+      .dark .tiptap ol ol ol > li:before {
+        color: #e5e7eb !important;
+      }
+
+      .dark .tiptap blockquote:not([class*="colored-bg-"]) {
+        border-left: 4px solid #4b5563 !important;
+        background-color: #1f2937 !important;
+        color: #e5e7eb !important;
+      }
+      .dark .tiptap blockquote p,
+      .dark .tiptap blockquote h1,
+      .dark .tiptap blockquote h2,
+      .dark .tiptap blockquote h3,
+      .dark .tiptap blockquote h4,
+      .dark .tiptap blockquote h5,
+      .dark .tiptap blockquote h6,
+      .dark .tiptap blockquote span {
+        color: #e5e7eb !important;
+      }
+
+      .dark .tiptap details {
+        border-color: #374151 !important;
+        background-color: #1f2937 !important;
+      }
+      .dark .tiptap details[open] {
+        background-color: #1e293b !important;
+      }
+      .dark .tiptap details p {
+        color: #d1d5db !important;
+      }
+      .dark .tiptap summary {
+        color: #f3f4f6 !important;
+      }
+      .dark .tiptap summary:hover {
+        color: #60a5fa !important;
+      }
+
+      .dark .tiptap ul[data-type="taskList"] li[data-type="taskItem"] p {
+        color: #e5e7eb !important;
+      }
+
+      /* Dark mode Notion Markdown Body (Viewer Mode) */
+      .dark .notion-markdown-body {
+        color: #e5e7eb !important;
+      }
+      .dark .notion-markdown-body p,
+      .dark .notion-markdown-body li,
+      .dark .notion-markdown-body ul,
+      .dark .notion-markdown-body ol {
+        color: #e5e7eb !important;
+      }
+      .dark .notion-markdown-body h1,
+      .dark .notion-markdown-body h2,
+      .dark .notion-markdown-body h3,
+      .dark .notion-markdown-body h4,
+      .dark .notion-markdown-body h5,
+      .dark .notion-markdown-body h6 {
+        color: #f3f4f6 !important;
+      }
+      .dark .notion-markdown-body h1:not([class*="colored-bg-"]) {
+        background-color: #1e293b !important;
+      }
+      .dark .notion-markdown-body h2:not([class*="colored-bg-"]) {
+        background-color: #1f2937 !important;
+      }
+      .dark .notion-markdown-body h3:not([class*="colored-bg-"]) {
+        background-color: #1a2234 !important;
+      }
+      .dark .notion-markdown-body blockquote:not([class*="colored-bg-"]) {
+        border-left: 4px solid #4b5563 !important;
+        background-color: #1f2937 !important;
+        color: #e5e7eb !important;
+      }
+      .dark .notion-markdown-body blockquote:not([class*="colored-bg-"]) * {
+        color: #e5e7eb !important;
+      }
+
+      /* Highlighter (형광펜) & Mark Styles - Ensure text is crisp & dark on light pastel highlights */
+      .tiptap mark,
+      .notion-markdown-body mark,
+      mark {
+        border-radius: 0.2rem;
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+        color: #292929 !important;
+      }
+
+      .tiptap mark *,
+      .notion-markdown-body mark *,
+      mark * {
+        color: #292929 !important;
+      }
+
+      /* Dark Mode Highlighting Protection */
+      .dark mark,
+      .dark .tiptap mark,
+      .dark .notion-markdown-body mark,
+      .dark .tiptap h1 mark,
+      .dark .tiptap h2 mark,
+      .dark .tiptap h3 mark,
+      .dark .tiptap h4 mark,
+      .dark .tiptap h5 mark,
+      .dark .tiptap h6 mark,
+      .dark .tiptap p mark,
+      .dark .tiptap li mark,
+      .dark .tiptap blockquote mark,
+      .dark .tiptap details mark,
+      .dark .notion-markdown-body h1 mark,
+      .dark .notion-markdown-body h2 mark,
+      .dark .notion-markdown-body h3 mark,
+      .dark .notion-markdown-body p mark,
+      .dark .notion-markdown-body li mark,
+      .dark .notion-markdown-body blockquote mark {
+        color: #111827 !important;
+        text-shadow: none !important;
+      }
+
+      .dark mark *,
+      .dark .tiptap mark *,
+      .dark .notion-markdown-body mark *,
+      .dark .tiptap h1 mark *,
+      .dark .tiptap h2 mark *,
+      .dark .tiptap h3 mark *,
+      .dark .tiptap h4 mark *,
+      .dark .tiptap h5 mark *,
+      .dark .tiptap h6 mark *,
+      .dark .tiptap p mark *,
+      .dark .tiptap li mark *,
+      .dark .tiptap blockquote mark *,
+      .dark .tiptap details mark *,
+      .dark .notion-markdown-body h1 mark *,
+      .dark .notion-markdown-body h2 mark *,
+      .dark .notion-markdown-body h3 mark *,
+      .dark .notion-markdown-body p mark *,
+      .dark .notion-markdown-body li mark *,
+      .dark .notion-markdown-body blockquote mark * {
+        color: #111827 !important;
+        text-shadow: none !important;
+      }
+
+      .dark mark strong,
+      .dark mark b,
+      .dark .tiptap mark strong,
+      .dark .tiptap mark b,
+      .dark .notion-markdown-body mark strong,
+      .dark .notion-markdown-body mark b {
+        color: #000000 !important;
+        font-weight: 700 !important;
+      }
+
+      .dark mark em,
+      .dark mark i,
+      .dark .tiptap mark em,
+      .dark .tiptap mark i,
+      .dark .notion-markdown-body mark em,
+      .dark .notion-markdown-body mark i {
+        color: #111827 !important;
+        font-style: italic !important;
+      }
+
+      .dark mark code,
+      .dark .tiptap mark code,
+      .dark .notion-markdown-body mark code {
+        color: #991b1b !important;
+        background: rgba(0, 0, 0, 0.08) !important;
+      }
+
+      .dark mark a,
+      .dark .tiptap mark a,
+      .dark .notion-markdown-body mark a {
+        color: #1d4ed8 !important;
+        text-decoration: underline !important;
+      }
+
+      /* Canonical highlight palette: names owned by services/highlight.ts. */
+      /* --hl-*: body surface, follows the contrast setting (see applyContrastLevel). */
+      /* --hl-h-*: heading surface, standard-fixed. --hl-t-* and --hl-q-*: lighter-fixed. */
+      :root {
+        --hl-yellow: rgba(254, 243, 199, 0.5);
+        --hl-blue: rgba(220, 235, 255, 0.5);
+        --hl-green: rgba(215, 243, 225, 0.5);
+        --hl-red: rgba(255, 232, 241, 0.8);
+        --hl-purple: rgba(242, 222, 251, 0.65);
+        --hl-gray: rgba(246, 246, 246, 0.5);
+        --hl-h-yellow: rgba(254, 243, 199, 0.5);
+        --hl-h-blue: rgba(220, 235, 255, 0.5);
+        --hl-h-green: rgba(215, 243, 225, 0.5);
+        --hl-h-red: rgba(255, 232, 241, 0.8);
+        --hl-h-purple: rgba(242, 222, 251, 0.65);
+        --hl-h-gray: rgba(246, 246, 246, 0.5);
+        --hl-t-yellow: rgba(254, 243, 199, 0.25);
+        --hl-t-blue: rgba(220, 235, 255, 0.25);
+        --hl-t-green: rgba(215, 243, 225, 0.25);
+        --hl-t-red: rgba(255, 232, 241, 0.35);
+        --hl-t-purple: rgba(242, 222, 251, 0.3);
+        --hl-t-gray: rgba(246, 246, 246, 0.25);
+        --hl-q-yellow: rgba(254, 243, 199, 0.25);
+        --hl-q-blue: rgba(220, 235, 255, 0.25);
+        --hl-q-green: rgba(215, 243, 225, 0.25);
+        --hl-q-red: rgba(255, 232, 241, 0.35);
+        --hl-q-purple: rgba(242, 222, 251, 0.3);
+        --hl-q-gray: rgba(246, 246, 246, 0.25);
+      }
+      .dark {
+        --hl-yellow: rgba(133, 100, 4, 0.1);
+        --hl-blue: rgba(30, 58, 138, 0.1);
+        --hl-green: rgba(20, 83, 45, 0.1);
+        --hl-red: rgba(153, 27, 27, 0.1);
+        --hl-purple: rgba(88, 28, 135, 0.1);
+        --hl-gray: rgba(55, 65, 81, 0.1);
+        --hl-h-yellow: #2c2414;
+        --hl-h-blue: #162033;
+        --hl-h-green: #13261d;
+        --hl-h-red: #2d181c;
+        --hl-h-purple: #261733;
+        --hl-h-gray: #242c38;
+        --hl-t-yellow: rgba(133, 100, 4, 0.75);
+        --hl-t-blue: rgba(30, 58, 138, 0.75);
+        --hl-t-green: rgba(20, 83, 45, 0.75);
+        --hl-t-red: rgba(153, 27, 27, 0.75);
+        --hl-t-purple: rgba(88, 28, 135, 0.75);
+        --hl-t-gray: rgba(55, 65, 81, 0.75);
+        --hl-q-yellow: #2c2414;
+        --hl-q-blue: #162033;
+        --hl-q-green: #13261d;
+        --hl-q-red: #2d181c;
+        --hl-q-purple: #261733;
+        --hl-q-gray: #242c38;
+      }
+
+      .tiptap mark[data-color="yellow"],
+      .notion-markdown-body mark[data-color="yellow"],
+      mark[data-color="yellow"] {
+        background-color: var(--hl-yellow) !important;
+        color: #292929 !important;
+        border-radius: 3px;
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+      }
+      .tiptap mark[data-color="blue"],
+      .notion-markdown-body mark[data-color="blue"],
+      mark[data-color="blue"] {
+        background-color: var(--hl-blue) !important;
+        color: #292929 !important;
+        border-radius: 3px;
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+      }
+      .tiptap mark[data-color="green"],
+      .notion-markdown-body mark[data-color="green"],
+      mark[data-color="green"] {
+        background-color: var(--hl-green) !important;
+        color: #292929 !important;
+        border-radius: 3px;
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+      }
+      .tiptap mark[data-color="red"],
+      .notion-markdown-body mark[data-color="red"],
+      mark[data-color="red"] {
+        background-color: var(--hl-red) !important;
+        color: #292929 !important;
+        border-radius: 3px;
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+      }
+      .tiptap mark[data-color="purple"],
+      .notion-markdown-body mark[data-color="purple"],
+      mark[data-color="purple"] {
+        background-color: var(--hl-purple) !important;
+        color: #292929 !important;
+        border-radius: 3px;
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+      }
+      .tiptap mark[data-color="gray"],
+      .notion-markdown-body mark[data-color="gray"],
+      mark[data-color="gray"] {
+        background-color: var(--hl-gray) !important;
+        color: #292929 !important;
+        border-radius: 3px;
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+      }
+      /* Heading surface: standard-fixed chip backgrounds (see SurfacePolicy). */
+      .tiptap h1.colored-bg-yellow,
+      .tiptap h2.colored-bg-yellow,
+      .tiptap h3.colored-bg-yellow,
+      .tiptap h4.colored-bg-yellow,
+      .tiptap h5.colored-bg-yellow,
+      .tiptap h6.colored-bg-yellow,
+      .notion-markdown-body h1.colored-bg-yellow,
+      .notion-markdown-body h2.colored-bg-yellow,
+      .notion-markdown-body h3.colored-bg-yellow,
+      .notion-markdown-body h4.colored-bg-yellow,
+      .notion-markdown-body h5.colored-bg-yellow,
+      .notion-markdown-body h6.colored-bg-yellow {
+        background-color: var(--hl-h-yellow) !important;
+      }
+      .tiptap h1 mark[data-color="yellow"],
+      .tiptap h2 mark[data-color="yellow"],
+      .tiptap h3 mark[data-color="yellow"],
+      .tiptap h4 mark[data-color="yellow"],
+      .tiptap h5 mark[data-color="yellow"],
+      .tiptap h6 mark[data-color="yellow"],
+      .notion-markdown-body h1 mark[data-color="yellow"],
+      .notion-markdown-body h2 mark[data-color="yellow"],
+      .notion-markdown-body h3 mark[data-color="yellow"],
+      .notion-markdown-body h4 mark[data-color="yellow"],
+      .notion-markdown-body h5 mark[data-color="yellow"],
+      .notion-markdown-body h6 mark[data-color="yellow"] {
+        background-color: var(--hl-h-yellow) !important;
+      }
+      .tiptap h1.colored-bg-blue,
+      .tiptap h2.colored-bg-blue,
+      .tiptap h3.colored-bg-blue,
+      .tiptap h4.colored-bg-blue,
+      .tiptap h5.colored-bg-blue,
+      .tiptap h6.colored-bg-blue,
+      .notion-markdown-body h1.colored-bg-blue,
+      .notion-markdown-body h2.colored-bg-blue,
+      .notion-markdown-body h3.colored-bg-blue,
+      .notion-markdown-body h4.colored-bg-blue,
+      .notion-markdown-body h5.colored-bg-blue,
+      .notion-markdown-body h6.colored-bg-blue {
+        background-color: var(--hl-h-blue) !important;
+      }
+      .tiptap h1 mark[data-color="blue"],
+      .tiptap h2 mark[data-color="blue"],
+      .tiptap h3 mark[data-color="blue"],
+      .tiptap h4 mark[data-color="blue"],
+      .tiptap h5 mark[data-color="blue"],
+      .tiptap h6 mark[data-color="blue"],
+      .notion-markdown-body h1 mark[data-color="blue"],
+      .notion-markdown-body h2 mark[data-color="blue"],
+      .notion-markdown-body h3 mark[data-color="blue"],
+      .notion-markdown-body h4 mark[data-color="blue"],
+      .notion-markdown-body h5 mark[data-color="blue"],
+      .notion-markdown-body h6 mark[data-color="blue"] {
+        background-color: var(--hl-h-blue) !important;
+      }
+      .tiptap h1.colored-bg-green,
+      .tiptap h2.colored-bg-green,
+      .tiptap h3.colored-bg-green,
+      .tiptap h4.colored-bg-green,
+      .tiptap h5.colored-bg-green,
+      .tiptap h6.colored-bg-green,
+      .notion-markdown-body h1.colored-bg-green,
+      .notion-markdown-body h2.colored-bg-green,
+      .notion-markdown-body h3.colored-bg-green,
+      .notion-markdown-body h4.colored-bg-green,
+      .notion-markdown-body h5.colored-bg-green,
+      .notion-markdown-body h6.colored-bg-green {
+        background-color: var(--hl-h-green) !important;
+      }
+      .tiptap h1 mark[data-color="green"],
+      .tiptap h2 mark[data-color="green"],
+      .tiptap h3 mark[data-color="green"],
+      .tiptap h4 mark[data-color="green"],
+      .tiptap h5 mark[data-color="green"],
+      .tiptap h6 mark[data-color="green"],
+      .notion-markdown-body h1 mark[data-color="green"],
+      .notion-markdown-body h2 mark[data-color="green"],
+      .notion-markdown-body h3 mark[data-color="green"],
+      .notion-markdown-body h4 mark[data-color="green"],
+      .notion-markdown-body h5 mark[data-color="green"],
+      .notion-markdown-body h6 mark[data-color="green"] {
+        background-color: var(--hl-h-green) !important;
+      }
+      .tiptap h1.colored-bg-red,
+      .tiptap h2.colored-bg-red,
+      .tiptap h3.colored-bg-red,
+      .tiptap h4.colored-bg-red,
+      .tiptap h5.colored-bg-red,
+      .tiptap h6.colored-bg-red,
+      .notion-markdown-body h1.colored-bg-red,
+      .notion-markdown-body h2.colored-bg-red,
+      .notion-markdown-body h3.colored-bg-red,
+      .notion-markdown-body h4.colored-bg-red,
+      .notion-markdown-body h5.colored-bg-red,
+      .notion-markdown-body h6.colored-bg-red {
+        background-color: var(--hl-h-red) !important;
+      }
+      .tiptap h1 mark[data-color="red"],
+      .tiptap h2 mark[data-color="red"],
+      .tiptap h3 mark[data-color="red"],
+      .tiptap h4 mark[data-color="red"],
+      .tiptap h5 mark[data-color="red"],
+      .tiptap h6 mark[data-color="red"],
+      .notion-markdown-body h1 mark[data-color="red"],
+      .notion-markdown-body h2 mark[data-color="red"],
+      .notion-markdown-body h3 mark[data-color="red"],
+      .notion-markdown-body h4 mark[data-color="red"],
+      .notion-markdown-body h5 mark[data-color="red"],
+      .notion-markdown-body h6 mark[data-color="red"] {
+        background-color: var(--hl-h-red) !important;
+      }
+      .tiptap h1.colored-bg-purple,
+      .tiptap h2.colored-bg-purple,
+      .tiptap h3.colored-bg-purple,
+      .tiptap h4.colored-bg-purple,
+      .tiptap h5.colored-bg-purple,
+      .tiptap h6.colored-bg-purple,
+      .notion-markdown-body h1.colored-bg-purple,
+      .notion-markdown-body h2.colored-bg-purple,
+      .notion-markdown-body h3.colored-bg-purple,
+      .notion-markdown-body h4.colored-bg-purple,
+      .notion-markdown-body h5.colored-bg-purple,
+      .notion-markdown-body h6.colored-bg-purple {
+        background-color: var(--hl-h-purple) !important;
+      }
+      .tiptap h1 mark[data-color="purple"],
+      .tiptap h2 mark[data-color="purple"],
+      .tiptap h3 mark[data-color="purple"],
+      .tiptap h4 mark[data-color="purple"],
+      .tiptap h5 mark[data-color="purple"],
+      .tiptap h6 mark[data-color="purple"],
+      .notion-markdown-body h1 mark[data-color="purple"],
+      .notion-markdown-body h2 mark[data-color="purple"],
+      .notion-markdown-body h3 mark[data-color="purple"],
+      .notion-markdown-body h4 mark[data-color="purple"],
+      .notion-markdown-body h5 mark[data-color="purple"],
+      .notion-markdown-body h6 mark[data-color="purple"] {
+        background-color: var(--hl-h-purple) !important;
+      }
+      .tiptap h1.colored-bg-gray,
+      .tiptap h2.colored-bg-gray,
+      .tiptap h3.colored-bg-gray,
+      .tiptap h4.colored-bg-gray,
+      .tiptap h5.colored-bg-gray,
+      .tiptap h6.colored-bg-gray,
+      .notion-markdown-body h1.colored-bg-gray,
+      .notion-markdown-body h2.colored-bg-gray,
+      .notion-markdown-body h3.colored-bg-gray,
+      .notion-markdown-body h4.colored-bg-gray,
+      .notion-markdown-body h5.colored-bg-gray,
+      .notion-markdown-body h6.colored-bg-gray {
+        background-color: var(--hl-h-gray) !important;
+      }
+      .tiptap h1 mark[data-color="gray"],
+      .tiptap h2 mark[data-color="gray"],
+      .tiptap h3 mark[data-color="gray"],
+      .tiptap h4 mark[data-color="gray"],
+      .tiptap h5 mark[data-color="gray"],
+      .tiptap h6 mark[data-color="gray"],
+      .notion-markdown-body h1 mark[data-color="gray"],
+      .notion-markdown-body h2 mark[data-color="gray"],
+      .notion-markdown-body h3 mark[data-color="gray"],
+      .notion-markdown-body h4 mark[data-color="gray"],
+      .notion-markdown-body h5 mark[data-color="gray"],
+      .notion-markdown-body h6 mark[data-color="gray"] {
+        background-color: var(--hl-h-gray) !important;
+      }
+
+
+      .dark .tiptap mark[data-color="yellow"],
+      .dark .notion-markdown-body mark[data-color="yellow"],
+      .dark mark[data-color="yellow"],
+      .dark .tiptap mark[data-color="yellow"] *,
+      .dark .notion-markdown-body mark[data-color="yellow"] *,
+      .dark mark[data-color="yellow"] * {
+        color: #FEF3C7 !important;
+        text-shadow: none !important;
+      }
+      .dark .tiptap mark[data-color="blue"],
+      .dark .notion-markdown-body mark[data-color="blue"],
+      .dark mark[data-color="blue"],
+      .dark .tiptap mark[data-color="blue"] *,
+      .dark .notion-markdown-body mark[data-color="blue"] *,
+      .dark mark[data-color="blue"] * {
+        color: #BFDBFE !important;
+        text-shadow: none !important;
+      }
+      .dark .tiptap mark[data-color="green"],
+      .dark .notion-markdown-body mark[data-color="green"],
+      .dark mark[data-color="green"],
+      .dark .tiptap mark[data-color="green"] *,
+      .dark .notion-markdown-body mark[data-color="green"] *,
+      .dark mark[data-color="green"] * {
+        color: #A7F3D0 !important;
+        text-shadow: none !important;
+      }
+      .dark .tiptap mark[data-color="red"],
+      .dark .notion-markdown-body mark[data-color="red"],
+      .dark mark[data-color="red"],
+      .dark .tiptap mark[data-color="red"] *,
+      .dark .notion-markdown-body mark[data-color="red"] *,
+      .dark mark[data-color="red"] * {
+        color: #FECACA !important;
+        text-shadow: none !important;
+      }
+      .dark .tiptap mark[data-color="purple"],
+      .dark .notion-markdown-body mark[data-color="purple"],
+      .dark mark[data-color="purple"],
+      .dark .tiptap mark[data-color="purple"] *,
+      .dark .notion-markdown-body mark[data-color="purple"] *,
+      .dark mark[data-color="purple"] * {
+        color: #DDD6FE !important;
+        text-shadow: none !important;
+      }
+      .dark .tiptap mark[data-color="gray"],
+      .dark .notion-markdown-body mark[data-color="gray"],
+      .dark mark[data-color="gray"],
+      .dark .tiptap mark[data-color="gray"] *,
+      .dark .notion-markdown-body mark[data-color="gray"] *,
+      .dark mark[data-color="gray"] * {
+        color: #E5E7EB !important;
+        text-shadow: none !important;
+      }
+
+      /* Table cell backgrounds (dark text kept, bg follows lighter-fixed table vars) */
+      .tiptap td[data-bg="yellow"],
+      .tiptap th[data-bg="yellow"],
+      .notion-markdown-body td[data-bg="yellow"],
+      .notion-markdown-body th[data-bg="yellow"] {
+        background-color: var(--hl-t-yellow) !important;
+      }
+      .tiptap td[data-bg="blue"],
+      .tiptap th[data-bg="blue"],
+      .notion-markdown-body td[data-bg="blue"],
+      .notion-markdown-body th[data-bg="blue"] {
+        background-color: var(--hl-t-blue) !important;
+      }
+      .tiptap td[data-bg="green"],
+      .tiptap th[data-bg="green"],
+      .notion-markdown-body td[data-bg="green"],
+      .notion-markdown-body th[data-bg="green"] {
+        background-color: var(--hl-t-green) !important;
+      }
+      .tiptap td[data-bg="red"],
+      .tiptap th[data-bg="red"],
+      .notion-markdown-body td[data-bg="red"],
+      .notion-markdown-body th[data-bg="red"] {
+        background-color: var(--hl-t-red) !important;
+      }
+      .tiptap td[data-bg="purple"],
+      .tiptap th[data-bg="purple"],
+      .notion-markdown-body td[data-bg="purple"],
+      .notion-markdown-body th[data-bg="purple"] {
+        background-color: var(--hl-t-purple) !important;
+      }
+      .tiptap td[data-bg="gray"],
+      .tiptap th[data-bg="gray"],
+      .notion-markdown-body td[data-bg="gray"],
+      .notion-markdown-body th[data-bg="gray"] {
+        background-color: var(--hl-t-gray) !important;
+      }
+
+      .dark .tiptap td[data-bg="yellow"],
+      .dark .tiptap th[data-bg="yellow"],
+      .dark .notion-markdown-body td[data-bg="yellow"],
+      .dark .notion-markdown-body th[data-bg="yellow"] {
+        color: #ffffff !important;
+      }
+      .dark .tiptap td[data-bg="blue"],
+      .dark .tiptap th[data-bg="blue"],
+      .dark .notion-markdown-body td[data-bg="blue"],
+      .dark .notion-markdown-body th[data-bg="blue"] {
+        color: #ffffff !important;
+      }
+      .dark .tiptap td[data-bg="green"],
+      .dark .tiptap th[data-bg="green"],
+      .dark .notion-markdown-body td[data-bg="green"],
+      .dark .notion-markdown-body th[data-bg="green"] {
+        color: #ffffff !important;
+      }
+      .dark .tiptap td[data-bg="red"],
+      .dark .tiptap th[data-bg="red"],
+      .dark .notion-markdown-body td[data-bg="red"],
+      .dark .notion-markdown-body th[data-bg="red"] {
+        color: #ffffff !important;
+      }
+      .dark .tiptap td[data-bg="purple"],
+      .dark .tiptap th[data-bg="purple"],
+      .dark .notion-markdown-body td[data-bg="purple"],
+      .dark .notion-markdown-body th[data-bg="purple"] {
+        color: #ffffff !important;
+      }
+      .dark .tiptap td[data-bg="gray"],
+      .dark .tiptap th[data-bg="gray"],
+      .dark .notion-markdown-body td[data-bg="gray"],
+      .dark .notion-markdown-body th[data-bg="gray"] {
+        color: #ffffff !important;
+      }
+
+
+      /* Code Blocks */
+      .tiptap pre,
+      .notion-markdown-body pre {
+        background: #f4f4f4;
+        border-radius: 4px;
+        padding: 1.5em;
+        overflow-x: auto;
+        font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif !important;
+        font-size: 1.05rem !important;
+        font-weight: 300 !important;
+        line-height: 1.6 !important;
+        margin: 1em 0;
+      }
+      .tiptap code {
+        font-family: 'SFMono-Regular', Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace;
+        background: rgba(135, 131, 120, 0.15);
+        color: #EB5757;
+        padding: 0.2em 0.4em;
+        border-radius: 3px;
+        font-size: 0.85em;
+      }
+      .tiptap pre code,
+      .notion-markdown-body pre code {
+        background: transparent;
+        color: inherit;
+        padding: 0;
+        font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif !important;
+        font-size: 1.05rem !important;
+        font-weight: 300 !important;
+        line-height: 1.6 !important;
+      }
+
+      /* Checkboxes */
+      .tiptap input[type="checkbox"] {
+        width: 1.1em;
+        height: 1.1em;
+        margin: 0; /* Remove margin from input as label handles it */
+        cursor: pointer;
+        vertical-align: text-bottom;
+      }
+
+      .tiptap hr {
+        border: 0;
+        border-top: 1px solid rgba(55, 53, 47, 0.09);
+        margin: 2em 0;
+      }
+      
+      .tiptap del {
+        text-decoration: line-through;
+        opacity: 0.6;
+      }
+
+      #print-appendix-container {
+        display: none;
+      }
+@media print {
+
+    button.fixed.bottom-6.left-6.bg-blue-600.hover\:bg-blue-500.text-white.p-3\.5.rounded-full.shadow-lg.z-40.transition-all.hover\:scale-110.flex.items-center.justify-center.group {
+        display: none;
+    }
+
+
+    /* 🚨 1. 모든 래퍼 컨테이너의 스크롤 및 높이 제한 완벽 해제 (1페이지 잘림 해결 핵심) */
+    html, body, #root, #root > div, #main-scroll-container, 
+    .h-screen, .h-full, .overflow-hidden, .overflow-y-auto {
+        height: auto !important;
+        min-height: 100% !important;
+        max-height: none !important;
+        overflow: visible !important;
+        position: static !important;
+    }
+
+    /* 🚨 2. 불필요한 UI 숨김 및 우측 선 제거 유지 */
+    #backlink-panel, #dict-popover, #dict-modal, #dict-search-modal, 
+    #floating-backlink-btn, nav, aside, .no-print {
+        display: none !important;
+    }
+    
+    ::-webkit-scrollbar { display: none !important; }
+    * { scrollbar-width: none !important; }
+
+    /* 🚨 3. 인쇄 시 텍스트나 박스가 페이지 중간에서 흉하게 반으로 잘리는 것 방지 */
+    .tiptap h1, .tiptap h2, .tiptap h3 {
+        page-break-after: avoid; /* 제목 다음에서 잘림 방지 */
+        break-after: avoid;
+    }
+    .tiptap pre, .tiptap blockquote, .appendix-item {
+        page-break-inside: avoid; /* 박스 내부에서 잘림 방지 */
+        break-inside: avoid;
+    }
+
+      /* 🚨 1. 우측 백링크 패널 및 불필요한 모달창 강제 숨김 (가장 유력한 원인) */
+    #backlink-panel, 
+    #dict-popover, 
+    #dict-modal, 
+    #dict-search-modal,
+    #floating-backlink-btn {
+        display: none !important;
+    }
+
+    /* 🚨 2. 커스텀 스크롤바 인쇄 방지 */
+    ::-webkit-scrollbar {
+        display: none !important;
+    }
+    * {
+        scrollbar-width: none !important;
+    }
+
+    /* 🚨 3. 메인 컨테이너 테두리 및 그림자 초기화 (React 컴포넌트 여백 찌꺼기 제거) */
+    #root, #root > div, #main-scroll-container {
+        border-right: none !important;
+        border-left: none !important;
+        box-shadow: none !important;
+        background-color: white !important;
+    }
+
+    /* 1. 모든 부모 요소의 높이 제한 및 스크롤 해제 */
+    html, body, #root, #root > div {
+        height: auto !important;
+        min-height: 100% !important;
+        overflow: visible !important;
+    }
+
+    /* 2. 실제 스크롤이 발생하는 컨테이너를 정적 상태로 변경 */
+    #main-scroll-container {
+        overflow: visible !important;
+        position: static !important;
+        height: auto !important;
+    }
+
+    /* 3. 인쇄 시 불필요한 고정 요소(Sticky) 위치 해제 */
+    .sticky {
+        position: static !important;
+    }
+
+    /* 4. 사이드바 등 불필요한 요소 확실히 제거 */
+    .no-print, nav, aside, [title="Toggle Sidebar"], .ai-menu-container, #network-status-indicator, #backup-toast {
+        display: none !important;
+    }
+
+    details:not([open]) > *:not(summary) {
+        display: block !important;
+        /* 기존 설정된 애니메이션이나 여백 보정을 위해 필요시 마진 추가 */
+        margin-top: 0.5em !important; 
+    }
+	
+	/* 📄 인쇄용 부록 스타일 */
+    #print-appendix-container {
+        display: block !important;
+        margin-top: 50px;
+        border-top: 2px solid #eee;
+        padding-top: 20px;
+        page-break-before: always; /* 부록은 항상 새 페이지에서 시작 */
+    }
+    .appendix-item {
+        margin-bottom: 20px;
+        page-break-inside: avoid; /* 항목 중간에 페이지가 잘리지 않도록 설정 */
+    }
+    .appendix-keyword {
+        font-weight: bold;
+        color: #2563eb;
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+    }
+    .appendix-title {
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 5px;
+    }
+    .appendix-content {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        color: #333;
+        white-space: pre-wrap;
+    }	
+}
+
+    
+@media print {
+  .no-print,
+  .no-print *,
+  button.no-print,
+  nav,
+  aside,
+  .ai-menu-container,
+  .options-menu-container,
+  .table-menu-container {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Reset layout zoom and scale so all notes print at identical dimensions */
+  #main-scroll-container,
+  #main-scroll-container > div,
+  .print-container {
+    zoom: 1 !important;
+    zoom: 100% !important;
+    transform: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Uniform print typography using physical point (pt) units */
+  html, body {
+    font-size: 12pt !important;
+    line-height: 1.5 !important;
+    background: white !important;
+    color: black !important;
+  }
+
+  .tiptap {
+    font-size: 11.5pt !important;
+    line-height: 1.5 !important;
+  }
+
+  .tiptap p, .tiptap li {
+    font-size: 11.5pt !important;
+    line-height: 1.5 !important;
+    margin-top: 2pt !important;
+    margin-bottom: 3pt !important;
+  }
+
+  .tiptap h1 {
+    font-size: 22pt !important;
+    font-weight: 800 !important;
+    margin-top: 14pt !important;
+    margin-bottom: 6pt !important;
+    line-height: 1.2 !important;
+  }
+
+  .tiptap h2 {
+    font-size: 17.5pt !important;
+    font-weight: 700 !important;
+    margin-top: 12pt !important;
+    margin-bottom: 5pt !important;
+    line-height: 1.25 !important;
+  }
+
+  .tiptap h3 {
+    font-size: 14pt !important;
+    font-weight: 700 !important;
+    margin-top: 10pt !important;
+    margin-bottom: 4pt !important;
+    line-height: 1.3 !important;
+  }
+
+  /* 인쇄용 코드블럭·표 서식: 화면 rem(!important)을 9.5pt로 덮어써 비대 출력 방지, Pretendard 유지 */
+  .tiptap pre,
+  .notion-markdown-body pre {
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif !important;
+    font-size: 9.5pt !important;
+    font-weight: 400 !important;
+    line-height: 1.45 !important;
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    background: #f4f4f4 !important;
+    color: #000 !important;
+  }
+
+  .tiptap pre code,
+  .notion-markdown-body pre code {
+    font-family: inherit !important;
+    font-size: 9.5pt !important;
+    font-weight: inherit !important;
+    line-height: 1.45 !important;
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    background: transparent !important;
+    color: inherit !important;
+  }
+
+  .tiptap code,
+  .notion-markdown-body code {
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif !important;
+    font-size: 9.5pt !important;
+  }
+
+  .tiptap table td,
+  .tiptap table th,
+  .tiptap table td p,
+  .tiptap table th p,
+  .notion-markdown-body table td,
+  .notion-markdown-body table th,
+  .notion-markdown-body table td p,
+  .notion-markdown-body table th p {
+    font-size: 9.5pt !important;
+    font-weight: 400 !important;
+    line-height: 1.45 !important;
+  }
+
+  .tiptap h4, .tiptap h5, .tiptap h6 {
+    font-size: 12pt !important;
+    font-weight: 600 !important;
+    margin-top: 8pt !important;
+    margin-bottom: 3pt !important;
+    line-height: 1.3 !important;
+  }
+
+  /* Details / Summary auto-expansion for print */
+  details,
+  details[open],
+  details:not([open]) {
+    display: block !important;
+  }
+
+  details > summary {
+    display: list-item !important;
+    font-weight: 600 !important;
+    margin-bottom: 4pt !important;
+  }
+
+  details > *:not(summary) {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    margin-top: 4pt !important;
+  }
+
+  /* Exclude Question Blocks (Multiple Choice & Boolean/OX) from print */
+  div[data-type="question-block"],
+  div[data-type="boolean-question-block"],
+  .question-card-container,
+  .boolean-question-container,
+  [data-node-view-wrapper]:has(.question-card-container),
+  [data-node-view-wrapper]:has(.boolean-question-container),
+  .question-block,
+  .boolean-question-block {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border: none !important;
+  }
+
+  /* Suppress dark backdrops and fixed overlays from darkening print preview */
+  .fixed.inset-0,
+  [class*="bg-black/"],
+  .backdrop-blur-sm {
+    display: none !important;
+  }
+
+  #main-scroll-container {
+    display: block !important;
+    position: static !important;
+    height: auto !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  #main-scroll-container > div {
+    display: block !important;
+    position: static !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    zoom: 100% !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  img, table, pre, blockquote {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .tableWrapper {
+    overflow: visible !important;
+    max-width: 100% !important;
+  }
+
+  table {
+    width: 100% !important;
+    max-width: 100% !important;
+    table-layout: auto !important;
+  }
+
+  /* Tab Block: expand all panels for print + show each tab label */
+  .tab-panels > [data-node-view-content-react] > div[data-type="tab-item"] {
+    display: block !important;
+  }
+
+  .tab-panels > [data-node-view-content-react] > div[data-type="tab-item"]::before {
+    content: attr(data-label);
+    display: block !important;
+    font-weight: 700 !important;
+    font-size: 12pt !important;
+    margin: 8pt 0 4pt !important;
+    color: black !important;
+  }
+
+  .tab-block {
+    break-inside: auto;
+  }
+}
+
+/* ------------------------------------------------------------------
+ * Tab Block (tab.md) — R3: 패널 내부 폰트 지정 금지 (.tiptap p 상속)
+ * ------------------------------------------------------------------ */
+.tab-headers {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+  /* Q5 모바일: 탭이 많으면 우측 fade와 함께 가로 스크롤 (레퍼런스 이미지 2) */
+  mask-image: linear-gradient(to right, black 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 92%, transparent 100%);
+}
+
+.tab-headers::-webkit-scrollbar {
+  height: 4px;
+}
+
+.tab-headers::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.dark .tab-headers {
+  scrollbar-color: #4b5563 transparent;
+}
+
+/* Tiptap React는 NodeViewContent 안에 contentDOM 래퍼를 추가한다.
+ * 직접자식 경로를 유지해 중첩 탭의 활성 상태에 간섭하지 않는다. */
+.tab-panels {
+  /* item2: 빈 패널도 클릭·입력 가능한 영역 확보 */
+  min-height: 3.5rem;
+  cursor: text;
+}
+
+.tab-panels > [data-node-view-content-react] > div[data-type="tab-item"] {
+  display: none;
+}
+
+.tab-panels > [data-node-view-content-react] > div[data-type="tab-item"][data-active="true"] {
+  display: block;
+}
+
+/* Q5 중첩 탭: 안쪽 카드 여백 축소 */
+.tab-panels .tab-block {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
