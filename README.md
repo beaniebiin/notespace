@@ -3,7 +3,8 @@
 </p>
 
 <h1 align="center">NoteSpace</h1>
-
+<p align="center" style="font-size: 0.8rem">Experimental Preview</p>
+<br>
 <p align="center">
   <strong>노트의 주권을 당신 곁에.</strong><br>
   <em>Your Note on Your Hand.</em>
