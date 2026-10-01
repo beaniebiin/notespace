@@ -1,8 +1,8 @@
 import { FileSystemNode, TagColor } from "./types";
 
-export const APP_VERSION = 'Build 260924';
+export const APP_VERSION = '0.1.0';
 
-export const INITIAL_CONTENT = `# Welcome to NoteSpace
+export const INITIAL_CONTENT = `# Welcome to NoteSpace!
 
 This is a **markdown-based** knowledge management system inspired by Notion.
 
@@ -13,7 +13,7 @@ This is a **markdown-based** knowledge management system inspired by Notion.
 - **Local Storage**: Data persists in your browser.
 
 ## Style Demo
-> This is a quote block. It looks like Notion's quote block.
+> This is a quote block. Inspired by the clean and modern look of Notion's styling.
 
 Here is a list:
 1. Item one
@@ -36,11 +36,11 @@ export const INITIAL_FILE_SYSTEM: FileSystemNode[] = [
     id: 'root-1',
     name: 'Getting Started',
     type: 'note',
-    
+
     lastModified: Date.now(),
     tags: [
-        { id: 'tag-1', label: 'Welcome', color: 'blue' },
-        { id: 'tag-2', label: 'Important', color: 'red' }
+      { id: 'tag-1', label: 'Welcome', color: 'blue' },
+      { id: 'tag-2', label: 'Important', color: 'red' }
     ]
   },
   {
@@ -49,13 +49,13 @@ export const INITIAL_FILE_SYSTEM: FileSystemNode[] = [
     type: 'folder',
     lastModified: Date.now(),
     children: [
-        {
-            id: 'note-2',
-            name: 'Journal',
-            type: 'note',
-            
-            lastModified: Date.now()
-        }
+      {
+        id: 'note-2',
+        name: 'Journal',
+        type: 'note',
+
+        lastModified: Date.now()
+      }
     ]
   }
 ];

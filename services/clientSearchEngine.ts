@@ -119,7 +119,7 @@ export function searchNotesInMemory(
   const extractActive = (nodes: FileSystemNode[]) => {
     for (const node of nodes) {
       if (node.type === 'note' && node.id) {
-        activeNotes.set(node.id, node.name || 'Untitled');
+        activeNotes.set(node.id, node.name || '제목 없음');
       }
       if (node.children && Array.isArray(node.children)) {
         extractActive(node.children);

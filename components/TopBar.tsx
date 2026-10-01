@@ -248,10 +248,10 @@ const TopBar: React.FC<TopBarProps> = ({
 
     const renderSaveIndicator = () => {
         const info: SaveStatusInfo = typeof saveStatus === 'string'
-            ? { 
-                state: (saveStatus as SaveStatusState), 
-                message: saveStatus === 'saving' ? '저장 중...' : saveStatus === 'saved' ? '저장됨' : '' 
-              }
+            ? {
+                state: (saveStatus as SaveStatusState),
+                message: saveStatus === 'saving' ? '저장 중...' : saveStatus === 'saved' ? '노트 저장됨' : ''
+            }
             : saveStatus;
 
         if (info.state === 'idle') return null;
@@ -259,7 +259,7 @@ const TopBar: React.FC<TopBarProps> = ({
         switch (info.state) {
             case 'version':
                 return (
-                    <span 
+                    <span
                         className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 border border-blue-200/70 dark:border-blue-700/60 shadow-xs transition-all duration-300 animate-in fade-in"
                         title="현재 빌드 버전"
                     >
@@ -269,7 +269,7 @@ const TopBar: React.FC<TopBarProps> = ({
                 );
             case 'saving':
                 return (
-                    <span 
+                    <span
                         className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border border-amber-200/70 dark:border-amber-700/60 shadow-xs transition-all duration-300 animate-in fade-in"
                         title="변경 사항 저장 중"
                     >
@@ -279,7 +279,7 @@ const TopBar: React.FC<TopBarProps> = ({
                 );
             case 'error':
                 return (
-                    <span 
+                    <span
                         className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-red-50 dark:bg-red-900/40 text-red-600 dark:text-red-300 border border-red-200/80 dark:border-red-700/70 shadow-xs transition-all duration-300 animate-in fade-in"
                         title="저장 또는 요청 실패"
                     >
@@ -289,7 +289,7 @@ const TopBar: React.FC<TopBarProps> = ({
                 );
             case 'ai_generating':
                 return (
-                    <span 
+                    <span
                         className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200/70 dark:border-purple-700/60 shadow-xs transition-all duration-300 animate-in fade-in"
                         title="AI 생성 작업 진행 중"
                     >
@@ -299,7 +299,7 @@ const TopBar: React.FC<TopBarProps> = ({
                 );
             case 'ai_success':
                 return (
-                    <span 
+                    <span
                         className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200/70 dark:border-purple-700/60 shadow-xs transition-all duration-300 animate-in fade-in"
                         title="AI 생성 완료"
                     >
@@ -309,12 +309,12 @@ const TopBar: React.FC<TopBarProps> = ({
                 );
             case 'saved':
                 return (
-                    <span 
+                    <span
                         className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium text-gray-400 dark:text-gray-500 transition-all duration-300 hover:text-gray-600 dark:hover:text-gray-300 animate-in fade-in"
                         title="모든 변경 사항이 저장되었습니다"
                     >
                         <Check size={12} className="text-emerald-500" />
-                        {info.message || '저장됨'}
+                        {info.message || '노트 저장됨'}
                     </span>
                 );
             default:
@@ -339,12 +339,11 @@ const TopBar: React.FC<TopBarProps> = ({
                             return (
                                 <React.Fragment key={crumb.id}>
                                     {index > 0 && <span className="mr-1 text-gray-400 hidden sm:inline">/</span>}
-                                    <span 
-                                        className={`mr-1 truncate ${
-                                            isLast 
-                                                ? 'font-medium text-[#191919] dark:text-gray-100' 
-                                                : 'hidden sm:inline'
-                                        }`}
+                                    <span
+                                        className={`mr-1 truncate ${isLast
+                                            ? 'font-medium text-[#191919] dark:text-gray-100'
+                                            : 'hidden sm:inline'
+                                            }`}
                                     >
                                         {crumb.name}
                                     </span>
@@ -359,7 +358,7 @@ const TopBar: React.FC<TopBarProps> = ({
                         {notifications && notifications.map(notif => {
                             if (notif.type === 'ai_loading') {
                                 return (
-                                    <span 
+                                    <span
                                         key={notif.id}
                                         className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200/80 dark:border-purple-700/60 shadow-xs animate-in fade-in zoom-in-95 duration-200"
                                         title="AI 작업 중"
@@ -371,7 +370,7 @@ const TopBar: React.FC<TopBarProps> = ({
                             }
                             if (notif.type === 'ai_success') {
                                 return (
-                                    <span 
+                                    <span
                                         key={notif.id}
                                         className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200/80 dark:border-purple-700/60 shadow-xs animate-in fade-in zoom-in-95 duration-200"
                                         title="AI 완료"
@@ -383,7 +382,7 @@ const TopBar: React.FC<TopBarProps> = ({
                             }
                             if (notif.type === 'tree_saved') {
                                 return (
-                                    <span 
+                                    <span
                                         key={notif.id}
                                         className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-700/60 shadow-xs animate-in fade-in zoom-in-95 duration-200"
                                         title="구조 저장 완료"
@@ -395,7 +394,7 @@ const TopBar: React.FC<TopBarProps> = ({
                             }
                             if (notif.type === 'tree_error' || notif.type === 'ai_error') {
                                 return (
-                                    <span 
+                                    <span
                                         key={notif.id}
                                         className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 border border-red-200/80 dark:border-red-700/60 shadow-xs animate-in fade-in zoom-in-95 duration-200"
                                         title="오류"
@@ -406,7 +405,7 @@ const TopBar: React.FC<TopBarProps> = ({
                                 );
                             }
                             return (
-                                <span 
+                                <span
                                     key={notif.id}
                                     className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 shadow-xs animate-in fade-in zoom-in-95 duration-200"
                                 >
@@ -431,337 +430,333 @@ const TopBar: React.FC<TopBarProps> = ({
                 {node && (
                     <>
                         {/* Edit Mode Toggle Popover */}
-                <div className="relative mode-menu-container">
-                    <button
-                        onClick={() => setShowModeMenu(!showModeMenu)}
-                        className={`p-1.5 rounded-lg text-sm font-medium transition-colors border ${
-                            showModeMenu
-                                ? 'bg-blue-50 border-blue-200 text-blue-600 dark:bg-blue-900/40 dark:border-blue-700 dark:text-blue-400'
-                                : 'bg-gray-100/80 dark:bg-gray-800 hover:bg-gray-200/80 dark:hover:bg-gray-700 text-blue-600 dark:text-blue-400 border-gray-200/50 dark:border-gray-750'
-                        }`}
-                        title="편집 모드 전환 (Visual / Viewer / Raw)"
-                    >
-                        {editorMode === 'wysiwyg' && <Edit3 size={16} />}
-                        {editorMode === 'viewer' && <Eye size={16} />}
-                        {editorMode === 'raw' && <Code size={16} />}
-                    </button>
-
-                    {showModeMenu && (
-                        <div className="absolute right-0 top-full mt-1.5 p-1 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 flex items-center space-x-1 z-50 animate-in fade-in zoom-in-95 duration-150">
+                        <div className="relative mode-menu-container">
                             <button
-                                onClick={() => {
-                                    onSetEditorMode('wysiwyg');
-                                    setShowModeMenu(false);
-                                }}
-                                className={`p-2 rounded-xl text-sm transition-all ${
-                                    editorMode === 'wysiwyg'
-                                        ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 shadow-xs'
-                                        : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50'
-                                }`}
-                                title="Visual Editor (위지윅 편집기)"
+                                onClick={() => setShowModeMenu(!showModeMenu)}
+                                className={`p-1.5 rounded-lg text-sm font-medium transition-colors border ${showModeMenu
+                                    ? 'bg-blue-50 border-blue-200 text-blue-600 dark:bg-blue-900/40 dark:border-blue-700 dark:text-blue-400'
+                                    : 'bg-gray-100/80 dark:bg-gray-800 hover:bg-gray-200/80 dark:hover:bg-gray-700 text-blue-600 dark:text-blue-400 border-gray-200/50 dark:border-gray-700/60'
+                                    }`}
+                                title="편집 모드 전환 (Visual / Viewer / Raw)"
                             >
-                                <Edit3 size={16} />
+                                {editorMode === 'wysiwyg' && <Edit3 size={16} />}
+                                {editorMode === 'viewer' && <Eye size={16} />}
+                                {editorMode === 'raw' && <Code size={16} />}
                             </button>
-                            <button
-                                onClick={() => {
-                                    onSetEditorMode('viewer');
-                                    setShowModeMenu(false);
-                                }}
-                                className={`p-2 rounded-xl text-sm transition-all ${
-                                    editorMode === 'viewer'
-                                        ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 shadow-xs'
-                                        : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50'
-                                }`}
-                                title="Read-only Viewer (읽기 전용 뷰어)"
-                            >
-                                <Eye size={16} />
-                            </button>
-                            <button
-                                onClick={() => {
-                                    onSetEditorMode('raw');
-                                    setShowModeMenu(false);
-                                }}
-                                className={`p-2 rounded-xl text-sm transition-all ${
-                                    editorMode === 'raw'
-                                        ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 shadow-xs'
-                                        : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50'
-                                }`}
-                                title="Raw Markdown (마크다운 소스)"
-                            >
-                                <Code size={16} />
-                            </button>
-                        </div>
-                    )}
-                </div>
 
-                {/* AI Button */}
-                <div className="relative ai-menu-container">
-                    <button
-                        onClick={() => setShowAiMenu(!showAiMenu)}
-                        onContextMenu={(e) => {
-                            e.preventDefault();
-                            if (onOpenAiEndpointSettings) {
-                                onOpenAiEndpointSettings();
-                            }
-                        }}
-                        disabled={isAiLoading}
-                        className={`p-1 rounded text-sm font-medium transition-colors
-                            ${isAiLoading
-                                ? 'text-gray-400 cursor-wait'
-                                : 'text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20'
-                            }
-                        `}
-                        title="AI 메뉴 (좌클릭) / AI 엔드포인트 설정 (우클릭)"
-                    >
-                        <Sparkles size={18} className={isAiLoading ? "animate-pulse" : ""} />
-                    </button>
-
-                    {showAiMenu && (
-                        <div className="fixed left-3 right-3 top-14 sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-2 sm:w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden py-1 z-50">
-                            <div className="p-3">
-
-                                {/* Dual Dropdown Section (Endpoint -> Model) */}
-                                <div className="mb-3 p-2.5 bg-gray-50 dark:bg-gray-750 rounded-xl border border-gray-200/80 dark:border-gray-700 space-y-2">
-                                    <div className="flex items-center justify-between text-[11px] font-bold text-gray-700 dark:text-gray-200">
-                                        <span className="flex items-center gap-1.5">
-                                            <Server size={13} className="text-purple-600 dark:text-purple-400" />
-                                            엔드포인트 & 모델 선택
-                                        </span>
-                                        {onOpenAiEndpointSettings && (
-                                            <button
-                                                onClick={() => {
-                                                    setShowAiMenu(false);
-                                                    onOpenAiEndpointSettings();
-                                                }}
-                                                className="text-[10px] text-purple-600 dark:text-purple-400 hover:underline"
-                                            >
-                                                관리
-                                            </button>
-                                        )}
-                                    </div>
-
-                                    {/* 1. Endpoint Selector */}
-                                    <div>
-                                        <label className="block text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-0.5">
-                                            1. 엔드포인트 선택
-                                        </label>
-                                        <select
-                                            value={String(selectedEndpointId)}
-                                            onChange={e => handleEndpointChange(e.target.value)}
-                                            className="w-full text-xs font-semibold bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 rounded-lg px-2.5 py-1.5 outline-none focus:border-purple-500 transition-colors"
-                                        >
-                                            {endpoints.map(ep => (
-                                                <option key={ep.id} value={String(ep.id)}>
-                                                    {ep.name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-
-                                    {/* 2. Model Selector */}
-                                    <div>
-                                        <label className="block text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-0.5 flex items-center justify-between">
-                                            <span>2. 모델 선택 (1순위)</span>
-                                            <span className="text-[9px] text-purple-600 dark:text-purple-400 font-normal">* 실패시 하위 모델로 순차 폴백</span>
-                                        </label>
-                                        <select
-                                            value={selectedModel}
-                                            onChange={e => setSelectedModel(e.target.value)}
-                                            className="w-full text-xs font-mono font-semibold bg-white dark:bg-gray-800 text-purple-700 dark:text-purple-300 border border-gray-200 dark:border-gray-600 rounded-lg px-2.5 py-1.5 outline-none focus:border-purple-500 transition-colors"
-                                        >
-                                            {availableModels.map(m => (
-                                                <option key={m} value={m}>
-                                                    {m}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
+                            {showModeMenu && (
+                                <div className="absolute right-0 top-full mt-1.5 p-1 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 flex items-center space-x-1 z-50 animate-in fade-in zoom-in-95 duration-150">
+                                    <button
+                                        onClick={() => {
+                                            onSetEditorMode('wysiwyg');
+                                            setShowModeMenu(false);
+                                        }}
+                                        className={`p-2 rounded-xl text-sm transition-all ${editorMode === 'wysiwyg'
+                                            ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 shadow-xs'
+                                            : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                                            }`}
+                                        title="Visual Editor (위지윅 편집기)"
+                                    >
+                                        <Edit3 size={16} />
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            onSetEditorMode('viewer');
+                                            setShowModeMenu(false);
+                                        }}
+                                        className={`p-2 rounded-xl text-sm transition-all ${editorMode === 'viewer'
+                                            ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 shadow-xs'
+                                            : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                                            }`}
+                                        title="Read-only Viewer (읽기 전용 뷰어)"
+                                    >
+                                        <Eye size={16} />
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            onSetEditorMode('raw');
+                                            setShowModeMenu(false);
+                                        }}
+                                        className={`p-2 rounded-xl text-sm transition-all ${editorMode === 'raw'
+                                            ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 shadow-xs'
+                                            : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                                            }`}
+                                        title="Raw Markdown (마크다운 소스)"
+                                    >
+                                        <Code size={16} />
+                                    </button>
                                 </div>
+                            )}
+                        </div>
 
-                                <div className="h-[1px] bg-gray-100 dark:bg-gray-700 my-2.5"></div>
+                        {/* AI Button */}
+                        <div className="relative ai-menu-container">
+                            <button
+                                onClick={() => setShowAiMenu(!showAiMenu)}
+                                onContextMenu={(e) => {
+                                    e.preventDefault();
+                                    if (onOpenAiEndpointSettings) {
+                                        onOpenAiEndpointSettings();
+                                    }
+                                }}
+                                disabled={isAiLoading}
+                                className={`p-1 rounded text-sm font-medium transition-colors
+                            ${isAiLoading
+                                        ? 'text-gray-400 cursor-wait'
+                                        : 'text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20'
+                                    }
+                        `}
+                                title="AI 메뉴 (좌클릭) / AI 엔드포인트 설정 (우클릭)"
+                            >
+                                <Sparkles size={18} className={isAiLoading ? "animate-pulse" : ""} />
+                            </button>
 
-                                {/* Attachment Zone */}
-                                <div
-                                    className={`
+                            {showAiMenu && (
+                                <div className="fixed left-3 right-3 top-14 sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-2 sm:w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden py-1 z-50">
+                                    <div className="p-3">
+
+                                        {/* Dual Dropdown Section (Endpoint -> Model) */}
+                                        <div className="mb-3 p-2.5 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-200/80 dark:border-gray-700 space-y-2">
+                                            <div className="flex items-center justify-between text-[11px] font-bold text-gray-700 dark:text-gray-200">
+                                                <span className="flex items-center gap-1.5">
+                                                    <Server size={13} className="text-purple-600 dark:text-purple-400" />
+                                                    엔드포인트 & 모델 선택
+                                                </span>
+                                                {onOpenAiEndpointSettings && (
+                                                    <button
+                                                        onClick={() => {
+                                                            setShowAiMenu(false);
+                                                            onOpenAiEndpointSettings();
+                                                        }}
+                                                        className="text-[10px] text-purple-600 dark:text-purple-400 hover:underline"
+                                                    >
+                                                        관리
+                                                    </button>
+                                                )}
+                                            </div>
+
+                                            {/* 1. Endpoint Selector */}
+                                            <div>
+                                                <label className="block text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-0.5">
+                                                    1. 엔드포인트 선택
+                                                </label>
+                                                <select
+                                                    value={String(selectedEndpointId)}
+                                                    onChange={e => handleEndpointChange(e.target.value)}
+                                                    className="w-full text-xs font-semibold bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 rounded-lg px-2.5 py-1.5 outline-none focus:border-purple-500 transition-colors"
+                                                >
+                                                    {endpoints.map(ep => (
+                                                        <option key={ep.id} value={String(ep.id)}>
+                                                            {ep.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+
+                                            {/* 2. Model Selector */}
+                                            <div>
+                                                <label className="block text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-0.5 flex items-center justify-between">
+                                                    <span>2. 모델 선택 (1순위)</span>
+                                                    <span className="text-[9px] text-purple-600 dark:text-purple-400 font-normal">* 실패시 하위 모델로 순차 폴백</span>
+                                                </label>
+                                                <select
+                                                    value={selectedModel}
+                                                    onChange={e => setSelectedModel(e.target.value)}
+                                                    className="w-full text-xs font-mono font-semibold bg-white dark:bg-gray-800 text-purple-700 dark:text-purple-300 border border-gray-200 dark:border-gray-600 rounded-lg px-2.5 py-1.5 outline-none focus:border-purple-500 transition-colors"
+                                                >
+                                                    {availableModels.map(m => (
+                                                        <option key={m} value={m}>
+                                                            {m}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div className="h-[1px] bg-gray-100 dark:bg-gray-700 my-2.5"></div>
+
+                                        {/* Attachment Zone */}
+                                        <div
+                                            className={`
                                         border-2 border-dashed rounded-lg p-3 mb-2.5 text-center transition-colors cursor-pointer
                                         ${isDragging ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'}
                                     `}
-                                    onDragOver={handleDragOver}
-                                    onDragLeave={handleDragLeave}
-                                    onDrop={handleDrop}
-                                    onClick={() => fileInputRef.current?.click()}
-                                >
-                                    <div className="flex flex-col items-center justify-center text-gray-400 space-y-0.5">
-                                        <Upload size={18} />
-                                        <span className="text-[11px]">파일 첨부 (이미지 / PDF)</span>
+                                            onDragOver={handleDragOver}
+                                            onDragLeave={handleDragLeave}
+                                            onDrop={handleDrop}
+                                            onClick={() => fileInputRef.current?.click()}
+                                        >
+                                            <div className="flex flex-col items-center justify-center text-gray-400 space-y-0.5">
+                                                <Upload size={18} />
+                                                <span className="text-[11px]">파일 첨부 (이미지 / PDF)</span>
+                                            </div>
+                                            <input
+                                                type="file"
+                                                ref={fileInputRef}
+                                                className="hidden"
+                                                onChange={handleFileChange}
+                                                accept="image/*,text/*,application/pdf,.pdf"
+                                            />
+                                        </div>
+
+                                        {attachments.length > 0 && (
+                                            <div className="mb-2.5 space-y-1 max-h-24 overflow-y-auto">
+                                                {attachments.map((att, idx) => (
+                                                    <div key={idx} className="flex items-center justify-between text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1.5 rounded text-gray-700 dark:text-gray-200">
+                                                        <div className="flex items-center truncate">
+                                                            <File size={12} className="mr-2 text-gray-500" />
+                                                            <span className="truncate max-w-[180px]">{att.name}</span>
+                                                        </div>
+                                                        <button
+                                                            onClick={() => setAttachments(prev => prev.filter((_, i) => i !== idx))}
+                                                            className="text-gray-400 hover:text-red-500 ml-2"
+                                                        >
+                                                            ✕
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        <div className="flex items-center bg-gray-50 dark:bg-gray-700 rounded-lg px-2 py-1 border border-transparent focus-within:border-purple-200 dark:focus-within:border-purple-800 focus-within:ring-2 focus-within:ring-purple-100 dark:focus-within:ring-purple-900">
+                                            <input
+                                                type="text"
+                                                placeholder="AI에게 질문 또는 프롬프트 입력..."
+                                                className="bg-transparent border-none outline-none text-xs w-full py-1.5 text-gray-900 dark:text-white placeholder-gray-400"
+                                                value={customPrompt}
+                                                onChange={(e) => setCustomPrompt(e.target.value)}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter' && customPrompt.trim()) {
+                                                        handleAiClick(customPrompt);
+                                                    }
+                                                }}
+                                                autoFocus
+                                            />
+                                            <button
+                                                className="p-1.5 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 rounded hover:bg-purple-100 dark:hover:bg-purple-900/20 transition-colors shrink-0"
+                                                onClick={() => customPrompt.trim() && handleAiClick(customPrompt)}
+                                            >
+                                                <Send size={14} />
+                                            </button>
+                                        </div>
+
+                                        <label
+                                            className="flex items-center gap-1.5 mt-2 cursor-pointer select-none"
+                                            title="체크 시 현재 노트 내용 없이 작성한 질문만 AI에 전송됩니다"
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                checked={excludeContent}
+                                                onChange={(e) => setExcludeContent(e.target.checked)}
+                                                className="w-3.5 h-3.5 rounded accent-purple-600 cursor-pointer"
+                                            />
+                                            <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                                                노트 내용 반영 해제하기
+                                            </span>
+                                        </label>
                                     </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="h-4 w-[1px] bg-gray-200 dark:bg-gray-700 mx-1 sm:mx-2"></div>
+
+                        {/* Zoom Controls */}
+                        <div className="flex items-center space-x-1 mr-1 text-sm text-gray-500 dark:text-gray-400">
+                            <button
+                                onClick={() => setZoomLevel(Math.max(50, zoomLevel - 10))}
+                                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+                                title="Zoom Out"
+                            >
+                                -
+                            </button>
+                            <span className="w-10 text-center font-mono text-[11px]">{zoomLevel}%</span>
+                            <button
+                                onClick={() => setZoomLevel(Math.min(200, zoomLevel + 10))}
+                                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+                                title="Zoom In"
+                            >
+                                +
+                            </button>
+                        </div>
+
+                        <div className="h-4 w-[1px] bg-gray-200 dark:bg-gray-700 mx-1 sm:mx-2"></div>
+
+
+                        <div className="relative options-menu-container">
+                            <button
+                                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded text-gray-500 transition-colors"
+                                onClick={() => setShowOptionsMenu(!showOptionsMenu)}
+                            >
+                                <MoreHorizontal size={18} />
+                            </button>
+
+                            {showOptionsMenu && (
+                                <div className="absolute right-0 top-full mt-2 w-52 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden py-1 z-50">
+                                    <button
+                                        onClick={handleExportMarkdown}
+                                        className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center"
+                                    >
+                                        <Download size={14} className="mr-2" />
+                                        마크다운 내보내기
+                                    </button>
+                                    <button
+                                        onClick={handleExportPDF}
+                                        className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center"
+                                    >
+                                        <Printer size={14} className="mr-2" />
+                                        PDF로 내보내기
+                                    </button>
+                                    <div className="h-[1px] bg-gray-100 dark:bg-gray-700 my-1"></div>
+                                    <button
+                                        onClick={handleExportWorkspaceZip}
+                                        className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center"
+                                        title="전체 워크스페이스를 ZIP 파일로 백업"
+                                    >
+                                        <Archive size={14} className="mr-2 text-blue-500" />
+                                        전체 파일 내보내기 (ZIP)
+                                    </button>
+                                    <button
+                                        onClick={() => zipUploadInputRef.current?.click()}
+                                        className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center"
+                                        title="ZIP 백업 파일로 워크스페이스 복원"
+                                    >
+                                        <Upload size={14} className="mr-2 text-amber-500" />
+                                        전체 파일 가져오기 (ZIP)
+                                    </button>
                                     <input
                                         type="file"
-                                        ref={fileInputRef}
+                                        ref={zipUploadInputRef}
+                                        onChange={handleImportWorkspaceZip}
+                                        accept=".zip,application/zip"
                                         className="hidden"
-                                        onChange={handleFileChange}
-                                        accept="image/*,text/*,application/pdf,.pdf"
                                     />
-                                </div>
-
-                                {attachments.length > 0 && (
-                                    <div className="mb-2.5 space-y-1 max-h-24 overflow-y-auto">
-                                        {attachments.map((att, idx) => (
-                                            <div key={idx} className="flex items-center justify-between text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1.5 rounded text-gray-700 dark:text-gray-200">
-                                                <div className="flex items-center truncate">
-                                                    <File size={12} className="mr-2 text-gray-500" />
-                                                    <span className="truncate max-w-[180px]">{att.name}</span>
-                                                </div>
-                                                <button
-                                                    onClick={() => setAttachments(prev => prev.filter((_, i) => i !== idx))}
-                                                    className="text-gray-400 hover:text-red-500 ml-2"
-                                                >
-                                                    ✕
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-
-                                <div className="flex items-center bg-gray-50 dark:bg-gray-700 rounded-lg px-2 py-1 border border-transparent focus-within:border-purple-200 dark:focus-within:border-purple-800 focus-within:ring-2 focus-within:ring-purple-100 dark:focus-within:ring-purple-900">
-                                    <input
-                                        type="text"
-                                        placeholder="AI에게 질문 또는 프롬프트 입력..."
-                                        className="bg-transparent border-none outline-none text-xs w-full py-1.5 text-gray-900 dark:text-white placeholder-gray-400"
-                                        value={customPrompt}
-                                        onChange={(e) => setCustomPrompt(e.target.value)}
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter' && customPrompt.trim()) {
-                                                handleAiClick(customPrompt);
-                                            }
-                                        }}
-                                        autoFocus
-                                    />
+                                    <div className="h-[1px] bg-gray-100 dark:bg-gray-700 my-1"></div>
                                     <button
-                                        className="p-1.5 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 rounded hover:bg-purple-100 dark:hover:bg-purple-900/20 transition-colors shrink-0"
-                                        onClick={() => customPrompt.trim() && handleAiClick(customPrompt)}
+                                        onClick={() => { setShowMoveModal(true); setShowOptionsMenu(false); }}
+                                        className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center"
                                     >
-                                        <Send size={14} />
+                                        <FolderInput size={14} className="mr-2" />
+                                        이동
+                                    </button>
+                                    <button
+                                        onClick={() => { onOpenSettings(); setShowOptionsMenu(false); }}
+                                        className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center"
+                                    >
+                                        <Settings size={14} className="mr-2" />
+                                        설정
+                                    </button>
+                                    <div className="h-[1px] bg-gray-100 dark:bg-gray-700 my-1"></div>
+                                    <button
+                                        onClick={handleDelete}
+                                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center"
+                                    >
+                                        <Trash2 size={14} className="mr-2" />
+                                        노트 삭제
                                     </button>
                                 </div>
-
-                                <label
-                                    className="flex items-center gap-1.5 mt-2 cursor-pointer select-none"
-                                    title="체크 시 현재 노트 내용 없이 작성한 질문만 AI에 전송됩니다"
-                                >
-                                    <input
-                                        type="checkbox"
-                                        checked={excludeContent}
-                                        onChange={(e) => setExcludeContent(e.target.checked)}
-                                        className="w-3.5 h-3.5 rounded accent-purple-600 cursor-pointer"
-                                    />
-                                    <span className="text-[11px] text-gray-500 dark:text-gray-400">
-                                        노트 내용 반영 해제하기
-                                    </span>
-                                </label>
-                            </div>
+                            )}
                         </div>
-                    )}
-                </div>
-
-                <div className="h-4 w-[1px] bg-gray-200 dark:bg-gray-700 mx-1 sm:mx-2"></div>
-
-                {/* Zoom Controls */}
-                <div className="flex items-center space-x-1 mr-1 text-sm text-gray-500 dark:text-gray-400">
-                    <button
-                        onClick={() => setZoomLevel(Math.max(50, zoomLevel - 10))}
-                        className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
-                        title="Zoom Out"
-                    >
-                        -
-                    </button>
-                    <span className="w-10 text-center font-mono text-[11px]">{zoomLevel}%</span>
-                    <button
-                        onClick={() => setZoomLevel(Math.min(200, zoomLevel + 10))}
-                        className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
-                        title="Zoom In"
-                    >
-                        +
-                    </button>
-                </div>
-
-                <div className="h-4 w-[1px] bg-gray-200 dark:bg-gray-700 mx-1 sm:mx-2"></div>
-
-
-                <div className="relative options-menu-container">
-                    <button
-                        className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded text-gray-500 transition-colors"
-                        onClick={() => setShowOptionsMenu(!showOptionsMenu)}
-                    >
-                        <MoreHorizontal size={18} />
-                    </button>
-
-                    {showOptionsMenu && (
-                        <div className="absolute right-0 top-full mt-2 w-52 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden py-1 z-50">
-                            <button
-                                onClick={handleExportMarkdown}
-                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center"
-                            >
-                                <Download size={14} className="mr-2" />
-                                Export Markdown
-                            </button>
-                            <button
-                                onClick={handleExportPDF}
-                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center"
-                            >
-                                <Printer size={14} className="mr-2" />
-                                Export PDF
-                            </button>
-                            <div className="h-[1px] bg-gray-100 dark:bg-gray-700 my-1"></div>
-                            <button
-                                onClick={handleExportWorkspaceZip}
-                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center"
-                                title="전체 워크스페이스를 ZIP 파일로 백업"
-                            >
-                                <Archive size={14} className="mr-2 text-blue-500" />
-                                Export Workspace (ZIP)
-                            </button>
-                            <button
-                                onClick={() => zipUploadInputRef.current?.click()}
-                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center"
-                                title="ZIP 백업 파일로 워크스페이스 복원"
-                            >
-                                <Upload size={14} className="mr-2 text-amber-500" />
-                                Import Workspace (ZIP)
-                            </button>
-                            <input
-                                type="file"
-                                ref={zipUploadInputRef}
-                                onChange={handleImportWorkspaceZip}
-                                accept=".zip,application/zip"
-                                className="hidden"
-                            />
-                            <div className="h-[1px] bg-gray-100 dark:bg-gray-700 my-1"></div>
-                            <button
-                                onClick={() => { setShowMoveModal(true); setShowOptionsMenu(false); }}
-                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center"
-                            >
-                                <FolderInput size={14} className="mr-2" />
-                                Move to...
-                            </button>
-                            <button
-                                onClick={() => { onOpenSettings(); setShowOptionsMenu(false); }}
-                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center"
-                            >
-                                <Settings size={14} className="mr-2" />
-                                Settings
-                            </button>
-                            <div className="h-[1px] bg-gray-100 dark:bg-gray-700 my-1"></div>
-                            <button
-                                onClick={handleDelete}
-                                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center"
-                            >
-                                <Trash2 size={14} className="mr-2" />
-                                Delete
-                            </button>
-                        </div>
-                    )}
-                </div>
                     </>
                 )}
             </div>

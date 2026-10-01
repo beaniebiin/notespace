@@ -37,11 +37,13 @@ export enum SidebarView {
 }
 
 export type ContrastLevel = 'standard' | 'high';
+export type ThemeMode = 'system' | 'light' | 'dark';
 
 export interface AppSettings {
   title: string;
   logo: string;
   darkMode: boolean;
+  theme?: ThemeMode;
   contrast?: ContrastLevel;
 }
 

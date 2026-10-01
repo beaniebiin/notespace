@@ -75,10 +75,10 @@ export const WebsiteBlockComponent = (props: any) => {
             }}
           />
           <div className="flex gap-1">
-            <button onClick={handleSave} className="p-1 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded" title="Save">
+            <button onClick={handleSave} className="p-1 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded" title="저장">
               <Check size={16} />
             </button>
-            <button onClick={handleCancel} className="p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded" title="Cancel">
+            <button onClick={handleCancel} className="p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded" title="취소">
               <X size={16} />
             </button>
           </div>

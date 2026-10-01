@@ -210,8 +210,8 @@ const SortableSidebarItem: React.FC<{
     <div ref={setNodeRef} style={style} {...attributes} className="relative">
       {/* Visual drop indicator: BEFORE (insert above) */}
       {isDropBefore && (
-        <div 
-          className="absolute -top-[1px] left-2 right-2 h-[2px] bg-blue-500 z-30 pointer-events-none rounded-full shadow-[0_0_4px_rgba(59,130,246,0.5)]" 
+        <div
+          className="absolute -top-[1px] left-2 right-2 h-[2px] bg-blue-500 z-30 pointer-events-none rounded-full shadow-[0_0_4px_rgba(59,130,246,0.5)]"
         />
       )}
 
@@ -317,8 +317,8 @@ const SortableSidebarItem: React.FC<{
 
       {/* Visual drop indicator: AFTER (insert below) */}
       {isDropAfter && (
-        <div 
-          className="absolute -bottom-[1px] left-2 right-2 h-[2px] bg-blue-500 z-30 pointer-events-none rounded-full shadow-[0_0_4px_rgba(59,130,246,0.5)]" 
+        <div
+          className="absolute -bottom-[1px] left-2 right-2 h-[2px] bg-blue-500 z-30 pointer-events-none rounded-full shadow-[0_0_4px_rgba(59,130,246,0.5)]"
         />
       )}
 
@@ -651,7 +651,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
     if (!over || !currentDrop) return;
     const activeId = active.id as string;
-    
+
     if (currentDrop.targetId === 'root-droppable') {
       onMoveNode(activeId, undefined, undefined);
       return;
@@ -717,8 +717,19 @@ const Sidebar: React.FC<SidebarProps> = ({
           className="flex items-center space-x-2 font-semibold text-gray-700 cursor-pointer dark:text-gray-200"
           onClick={() => onChangeView(SidebarView.FILES)}
         >
-          <div className="w-6 h-6 bg-gray-800 text-white flex items-center justify-center rounded text-xs font-serif dark:bg-gray-700">
-            {appSettings.logo}
+          <div className="w-6 h-6 flex items-center justify-center rounded overflow-hidden flex-shrink-0">
+            <img
+              src="/icon.png"
+              alt="Logo"
+              className="w-full h-full object-contain"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                if (e.currentTarget.parentElement) {
+                  e.currentTarget.parentElement.className = 'w-6 h-6 bg-gray-800 text-white flex items-center justify-center rounded text-xs font-serif dark:bg-gray-700';
+                  e.currentTarget.parentElement.innerText = appSettings.logo || 'N';
+                }
+              }}
+            />
           </div>
           <span className="truncate">{appSettings.title}</span>
         </div>
@@ -730,21 +741,21 @@ const Sidebar: React.FC<SidebarProps> = ({
           className={`flex items-center text-gray-600 dark:text-gray-400 rounded px-2 py-1.5 text-sm cursor-pointer hover:bg-[rgba(55,53,47,0.08)] dark:hover:bg-[rgba(255,255,255,0.08)] transition-colors ${currentView === SidebarView.SEARCH ? 'bg-[rgba(55,53,47,0.08)] dark:bg-[rgba(255,255,255,0.08)] font-medium text-gray-900 dark:text-gray-200' : ''}`}
         >
           <Search size={14} className="mr-2" />
-          <span>Search</span>
+          <span>검색</span>
         </div>
         <div
           onClick={() => onChangeView(SidebarView.TAGS)}
           className={`flex items-center text-gray-600 dark:text-gray-400 rounded px-2 py-1.5 text-sm cursor-pointer hover:bg-[rgba(55,53,47,0.08)] dark:hover:bg-[rgba(255,255,255,0.08)] transition-colors ${currentView === SidebarView.TAGS ? 'bg-[rgba(55,53,47,0.08)] dark:bg-[rgba(255,255,255,0.08)] font-medium text-gray-900 dark:text-gray-200' : ''}`}
         >
           <Tags size={14} className="mr-2" />
-          <span>Tags</span>
+          <span>태그</span>
         </div>
         <div
           onClick={() => onChangeView(SidebarView.TRASH)}
           className={`flex items-center text-gray-600 dark:text-gray-400 rounded px-2 py-1.5 text-sm cursor-pointer hover:bg-[rgba(55,53,47,0.08)] dark:hover:bg-[rgba(255,255,255,0.08)] transition-colors ${currentView === SidebarView.TRASH ? 'bg-[rgba(55,53,47,0.08)] dark:bg-[rgba(255,255,255,0.08)] font-medium text-gray-900 dark:text-gray-200' : ''}`}
         >
           <Trash2 size={14} className="mr-2" />
-          <span>Trash</span>
+          <span>휴지통</span>
         </div>
       </div>
 
@@ -758,7 +769,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             onDragEnd={handleDragEnd}
           >
             <div className="group flex items-center justify-between px-3 py-2 mt-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:bg-[rgba(55,53,47,0.04)] dark:hover:bg-[rgba(255,255,255,0.04)] cursor-pointer">
-              <span>NOTES</span>
+              <span>나의 노트</span>
               <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
                   className="p-0.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded text-gray-600 dark:text-gray-400"
@@ -769,7 +780,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 </button>
                 <button
                   className="p-0.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded text-gray-600 dark:text-gray-400"
-                  title="New Page"
+                  title="새 노트"
                   onClick={(e) => { e.stopPropagation(); onCreateNode(undefined, 'note'); }}
                 >
                   <Plus size={14} />
@@ -825,7 +836,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 ref={searchInputRef}
                 autoFocus
                 type="text"
-                placeholder="노트 제목 또는 본문 검색..."
+                placeholder="검색어를 입력하세요."
                 className="w-full pl-8 pr-7 py-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md text-xs text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none transition-all focus:border-blue-400 dark:focus:border-blue-500 focus:ring-1 focus:ring-blue-400/30 dark:focus:ring-blue-500/30 shadow-xs"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -870,13 +881,12 @@ const Sidebar: React.FC<SidebarProps> = ({
                   return (
                     <div
                       key={res.id}
-                      className={`group p-2 rounded-md cursor-pointer border transition-all duration-150 text-left ${
-                        isSelected
-                          ? 'bg-blue-50/80 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800 shadow-xs'
-                          : isActive
+                      className={`group p-2 rounded-md cursor-pointer border transition-all duration-150 text-left ${isSelected
+                        ? 'bg-blue-50/80 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800 shadow-xs'
+                        : isActive
                           ? 'bg-white dark:bg-gray-800 border-blue-300 dark:border-blue-600 shadow-xs'
-                          : 'bg-white dark:bg-gray-800/60 hover:bg-gray-50 dark:hover:bg-gray-750 border-gray-200 dark:border-gray-700/70 hover:border-gray-300 dark:hover:border-gray-600'
-                      }`}
+                          : 'bg-white dark:bg-gray-800/60 hover:bg-gray-50 dark:hover:bg-gray-700/60 border-gray-200 dark:border-gray-700/70 hover:border-gray-300 dark:hover:border-gray-600'
+                        }`}
                       onClick={() => {
                         const node = findNode(nodes, res.id);
                         if (node) onSelectNote(node);
@@ -896,9 +906,8 @@ const Sidebar: React.FC<SidebarProps> = ({
                         <div className="flex items-center min-w-0 flex-1">
                           <FileText
                             size={13}
-                            className={`mr-1.5 shrink-0 ${
-                              isActive ? 'text-blue-500' : 'text-gray-400 dark:text-gray-500'
-                            }`}
+                            className={`mr-1.5 shrink-0 ${isActive ? 'text-blue-500' : 'text-gray-400 dark:text-gray-500'
+                              }`}
                           />
                           <span className="font-medium text-xs text-gray-800 dark:text-gray-200 truncate">
                             <HighlightMatch text={res.title} query={searchQuery} />
@@ -918,19 +927,18 @@ const Sidebar: React.FC<SidebarProps> = ({
                             </span>
                           )}
                           <span
-                            className={`text-[9px] px-1.5 py-0.2 rounded-full font-medium ${
-                              res.matchType === 'both'
-                                ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800'
-                                : res.matchType === 'title'
+                            className={`text-[9px] px-1.5 py-0.2 rounded-full font-medium ${res.matchType === 'both'
+                              ? 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800'
+                              : res.matchType === 'title'
                                 ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800'
                                 : 'bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800'
-                            }`}
+                              }`}
                           >
                             {res.matchType === 'both'
                               ? '제목+본문'
                               : res.matchType === 'title'
-                              ? '제목'
-                              : '본문'}
+                                ? '제목'
+                                : '본문'}
                           </span>
                         </div>
                       </div>
@@ -961,12 +969,6 @@ const Sidebar: React.FC<SidebarProps> = ({
               ) : (
                 <div className="flex flex-col items-center justify-center py-10 text-center px-4 text-gray-400 dark:text-gray-500">
                   <Search size={22} className="opacity-30 mb-2" />
-                  <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-0.5">
-                    빠른 노트 검색
-                  </div>
-                  <div className="text-[11px] text-gray-400 dark:text-gray-500">
-                    노트 제목과 본문 내용을 실시간으로 검색합니다.
-                  </div>
                 </div>
               )}
             </div>
@@ -976,10 +978,10 @@ const Sidebar: React.FC<SidebarProps> = ({
         {currentView === SidebarView.TAGS && (
           <div className="px-3 pt-2">
             <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-              Tags
+              태그
             </div>
             {tagsMap.size === 0 ? (
-              <div className="text-sm text-gray-400 italic px-2">No tags found</div>
+              <div className="text-sm text-gray-400 italic px-2">태그 없음</div>
             ) : (
               Array.from(tagsMap.entries()).map(([label, data]) => (
                 <TagGroup
@@ -997,10 +999,10 @@ const Sidebar: React.FC<SidebarProps> = ({
         {currentView === SidebarView.TRASH && (
           <div className="px-3 pt-2">
             <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-              Trash Bin ({trashItems.length})
+              휴지통 ({trashItems.length})
             </div>
             {trashItems.length === 0 ? (
-              <div className="text-sm text-gray-400 italic px-2">Trash is empty</div>
+              <div className="text-sm text-gray-400 italic px-2">휴지통이 비어있습니다.</div>
             ) : (
               trashItems.map(node => (
                 <TrashItem
@@ -1022,7 +1024,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             onClick={() => onCreateNode(undefined, 'note')}
           >
             <Plus size={16} className="mr-2" />
-            New Page
+            새 노트
           </button>
           <button
             className="p-2 text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 rounded flex items-center justify-center transition-colors"

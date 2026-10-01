@@ -1,8 +1,8 @@
 [package]
 name = "notespace"
 version = "0.1.0"
-description = "NoteSpace - Offline Knowledge Management"
-authors = ["beanie"]
+description = "주권이 완비된 마크다운 노트"
+authors = ["beaniebiin"]
 license = ""
 repository = ""
 edition = "2024"

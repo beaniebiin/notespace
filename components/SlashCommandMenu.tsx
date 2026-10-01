@@ -193,7 +193,7 @@ export const SlashCommandMenu: React.FC<SlashCommandMenuProps> = ({
               className={`w-full flex items-center gap-2.5 px-3 py-2 text-left transition-colors ${
                 isSelected
                   ? 'bg-gray-100 dark:bg-gray-700'
-                  : 'hover:bg-gray-50 dark:hover:bg-gray-750'
+                  : 'hover:bg-gray-50 dark:hover:bg-gray-700/60'
               }`}
               role="menuitem"
             >

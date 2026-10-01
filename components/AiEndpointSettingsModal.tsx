@@ -87,7 +87,7 @@ export const AiEndpointSettingsModal: React.FC<AiEndpointSettingsModalProps> = (
       <div className="bg-white dark:bg-gray-900 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-gray-200 dark:border-gray-800 relative overflow-hidden">
         
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between bg-gradient-to-r from-purple-50/50 to-blue-50/30 dark:from-gray-900 dark:to-gray-850">
+        <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between bg-gradient-to-r from-purple-50/50 to-blue-50/30 dark:from-gray-900 dark:to-gray-900">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center">
               <Server size={18} />
@@ -128,7 +128,7 @@ export const AiEndpointSettingsModal: React.FC<AiEndpointSettingsModalProps> = (
               {endpoints.map((ep, idx) => (
                 <div
                   key={ep.id || idx}
-                  className="border border-gray-200 dark:border-gray-800 rounded-xl p-4 bg-gray-50/50 dark:bg-gray-850 space-y-3.5 relative group"
+                  className="border border-gray-200 dark:border-gray-800 rounded-xl p-4 bg-gray-50/50 dark:bg-gray-900/60 space-y-3.5 relative group"
                 >
                   <div className="flex items-center justify-between gap-2 border-b border-gray-200/60 dark:border-gray-800 pb-2.5">
                     <div className="flex items-center gap-2">

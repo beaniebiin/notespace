@@ -66,7 +66,7 @@ export const useFileTree = (deps: { notify: (input: NotifyInput) => void }): Fil
       try {
         const ok = await storageService.saveTree(fileSystem);
         if (ok) {
-          notify({ type: 'tree_saved', message: '구조/위계 저장됨', duration: 2500 });
+          notify({ type: 'tree_saved', message: '구조 저장됨', duration: 2500 });
         } else {
           notify({ type: 'tree_error', message: '구조 저장 실패', duration: 4000 });
         }
@@ -228,7 +228,7 @@ export const useFileTree = (deps: { notify: (input: NotifyInput) => void }): Fil
     async (parentId: string | undefined, type: 'note' | 'folder') => {
       const newNode: FileSystemNode = {
         id: `node-${crypto.randomUUID()}`,
-        name: type === 'note' ? 'Untitled' : 'New Folder',
+        name: type === 'note' ? '제목 없음' : 'New Folder',
         type,
         parentId,
         lastModified: Date.now(),

@@ -42,7 +42,8 @@ const App: React.FC = () => {
   const [appSettings, setAppSettings] = useState<AppSettings>({
     title: 'NoteSpace',
     logo: 'N',
-    darkMode: false,
+    darkMode: typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)').matches : false,
+    theme: 'system',
     contrast: 'standard'
   });
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
@@ -91,10 +92,10 @@ const App: React.FC = () => {
   const [isNoteLoading, setIsNoteLoading] = useState<boolean>(false);
   const [editor, setEditor] = useState<Editor | null>(null);
   const [editorMode, setEditorMode] = useState<'wysiwyg' | 'raw' | 'viewer'>('wysiwyg');
-  
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [sidebarView, setSidebarView] = useState<SidebarView>(SidebarView.FILES);
-  
+
   const [aiLoading, setAiLoading] = useState(false);
   const [tocHeadings, setTocHeadings] = useState<{ id: string; text: string; level: number; color?: string }[]>([]);
   const [activeHeadingId, setActiveHeadingId] = useState<string | null>(null);
@@ -116,12 +117,26 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (appSettings.darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
+    const theme = appSettings.theme ?? (appSettings.darkMode ? 'dark' : 'light');
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    const applyTheme = () => {
+      const isDark = theme === 'system' ? mediaQuery.matches : theme === 'dark';
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    };
+
+    applyTheme();
+
+    if (theme === 'system') {
+      const listener = () => applyTheme();
+      mediaQuery.addEventListener('change', listener);
+      return () => mediaQuery.removeEventListener('change', listener);
     }
-  }, [appSettings.darkMode]);
+  }, [appSettings.theme, appSettings.darkMode]);
 
   useEffect(() => {
     applyContrastLevel(appSettings.contrast ?? 'standard');
@@ -148,7 +163,7 @@ const App: React.FC = () => {
         el.setAttribute('open', '');
       });
     };
-    
+
     const handleAfterPrint = () => {
       document.querySelectorAll('details[data-print-opened="true"]').forEach((el) => {
         el.removeAttribute('open');
@@ -168,25 +183,25 @@ const App: React.FC = () => {
   useEffect(() => {
     let isCurrent = true;
     const loadContent = async () => {
-        if (activeNoteId) {
-          setIsNoteLoading(true);
-          const content = await storageService.getContent(activeNoteId);
-          if (!isCurrent) return;
-          if (content === null) {
-            // 불러오기 실패: 이전 노트 내용이 화면에 남지 않도록 클리어하고 오류 알림
-            setEditorContent('');
-            setIsNoteLoading(false);
-            notify({ type: 'tree_error', message: '불러오기 실패 — 네트워크를 확인하세요', duration: 6000 });
-            return;
-          }
-          setEditorContent(content);
+      if (activeNoteId) {
+        setIsNoteLoading(true);
+        const content = await storageService.getContent(activeNoteId);
+        if (!isCurrent) return;
+        if (content === null) {
+          // 불러오기 실패: 이전 노트 내용이 화면에 남지 않도록 클리어하고 오류 알림
+          setEditorContent('');
           setIsNoteLoading(false);
-        } else {
-          if (isCurrent) {
-            setEditorContent('');
-            setIsNoteLoading(false);
-          }
+          notify({ type: 'tree_error', message: '불러오기 실패 — 네트워크를 확인하세요', duration: 6000 });
+          return;
         }
+        setEditorContent(content);
+        setIsNoteLoading(false);
+      } else {
+        if (isCurrent) {
+          setEditorContent('');
+          setIsNoteLoading(false);
+        }
+      }
     };
     loadContent();
     return () => {
@@ -268,14 +283,14 @@ const App: React.FC = () => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const noteId = params.get('note');
-    
+
     if (noteId) {
-        // Verify note exists
-        const node = findNode(fileSystem, noteId);
-        if (node) {
-            setActiveNoteId(noteId);
-            return;
-        }
+      // Verify note exists
+      const node = findNode(fileSystem, noteId);
+      if (node) {
+        setActiveNoteId(noteId);
+        return;
+      }
     }
 
     if (!activeNoteId && fileSystem.length > 0) {
@@ -315,7 +330,7 @@ const App: React.FC = () => {
         if (liveMarkdown !== editorContentRef.current) {
           adoptPending({ id: activeNoteId, content: liveMarkdown });
         }
-      } catch {}
+      } catch { }
     }
 
     // 2. 화면의 에디터를 즉시 언마운트하여 Ghost Mount 원천 차단
@@ -388,11 +403,11 @@ const App: React.FC = () => {
 
   const handleCopyLink = () => {
     if (!editor || !activeNoteId) return;
-    
+
     // For now, just copy link to the note, as deep linking to selection requires more complex setup in Tiptap
     const link = `?note=${activeNoteId}`;
     const markdownLink = `[Link to Note](${link})`;
-    
+
     navigator.clipboard.writeText(markdownLink).then(() => {
       alert("Link to note copied!");
     });
@@ -424,7 +439,7 @@ const App: React.FC = () => {
         endpointId: targetEndpointId,
         model: targetModel,
       });
-      
+
       if (outcome.status === 'success') {
         if (outcome.apply === 'codeBlock') {
           // 사실관계 정리 등: 결과를 코드블럭 노드로 삽입
@@ -437,8 +452,8 @@ const App: React.FC = () => {
         } else {
           editor.chain().focus().insertContent(outcome.markdown).run();
         }
-        
-        
+
+
         notify({ type: outcome.pill.type, message: outcome.pill.message, duration: outcome.pill.duration });
       } else if (outcome.status === 'endpoint_failed') {
         notify({ type: outcome.pill.type, message: outcome.pill.message, duration: outcome.pill.duration });
@@ -535,11 +550,11 @@ const App: React.FC = () => {
   const allTags = collectTags(fileSystem);
 
   return (
-    <div className="flex h-[100dvh] w-screen overflow-hidden bg-white text-[#37352f]">
-      
+    <div className="flex h-[100dvh] w-screen overflow-hidden bg-white dark:bg-gray-950 text-[#37352f] dark:text-gray-100">
+
       {/* Mobile Backdrop */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="no-print print:hidden fixed inset-0 bg-black/20 z-30 md:hidden backdrop-blur-sm transition-opacity"
           onClick={() => setIsSidebarOpen(false)}
         />
@@ -547,198 +562,198 @@ const App: React.FC = () => {
 
       {/* Sidebar Container */}
       <div className={`no-print
-          fixed inset-y-0 left-0 z-40 h-full bg-[#F7F6F3] border-r border-[#E9E9E7]
+          fixed inset-y-0 left-0 z-40 h-full bg-[#F7F6F3] dark:bg-gray-900 border-r border-[#E9E9E7] dark:border-gray-800
           transition-all duration-300 ease-in-out
           md:relative overflow-hidden
-          ${isSidebarOpen 
-            ? 'translate-x-0 w-64' 
-            : '-translate-x-full w-64 md:w-0 md:translate-x-0 md:border-none'
-          }
+          ${isSidebarOpen
+          ? 'translate-x-0 w-64'
+          : '-translate-x-full w-64 md:w-0 md:translate-x-0 md:border-none'
+        }
       `}>
-          <div className="w-64 h-full flex flex-col overflow-hidden relative">
-            <Sidebar 
-                nodes={fileSystem}
-                activeNoteId={activeNoteId}
-                currentView={sidebarView}
-                onChangeView={setSidebarView}
-                onSelectNote={handleSelectNote}
-                onCreateNode={createNode}
-                onDeleteNode={deleteNode}
-                trashItems={trashItems}
-                onRestoreNode={restoreNode}
-                onDeleteForever={deleteForever}
-                onRenameNode={renameNode}
-                onMoveNode={moveNode}
-                appSettings={appSettings}
-                onOpenSettings={() => setIsSettingsModalOpen(true)}
-            />
-            {/* Sidebar Close Button (Desktop & Mobile) */}
-            <button 
-                onClick={() => setIsSidebarOpen(false)}
-                className="absolute top-2 right-2 p-1 text-gray-500 hover:bg-gray-200 rounded z-50"
-                title="Close Sidebar"
-            >
-                <X size={20} />
-            </button>
-          </div>
+        <div className="w-64 h-full flex flex-col overflow-hidden relative">
+          <Sidebar
+            nodes={fileSystem}
+            activeNoteId={activeNoteId}
+            currentView={sidebarView}
+            onChangeView={setSidebarView}
+            onSelectNote={handleSelectNote}
+            onCreateNode={createNode}
+            onDeleteNode={deleteNode}
+            trashItems={trashItems}
+            onRestoreNode={restoreNode}
+            onDeleteForever={deleteForever}
+            onRenameNode={renameNode}
+            onMoveNode={moveNode}
+            appSettings={appSettings}
+            onOpenSettings={() => setIsSettingsModalOpen(true)}
+          />
+          {/* Sidebar Close Button (Desktop & Mobile) */}
+          <button
+            onClick={() => setIsSidebarOpen(false)}
+            className="absolute top-2 right-2 p-1 text-gray-500 hover:bg-gray-200 rounded z-50"
+            title="Close Sidebar"
+          >
+            <X size={20} />
+          </button>
+        </div>
       </div>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col h-screen supports-[height:100dvh]:h-[100dvh] overflow-hidden overscroll-none bg-white dark:bg-gray-900 transition-colors">
         {activeNode ? (
-            <>
-                <TopBar 
-                    node={activeNode}
-                    breadcrumbs={breadcrumbs}
-                    onAiAction={handleAiAction}
-                    isAiLoading={aiLoading}
-                    onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-                    onDelete={() => deleteNode(activeNode.id)}
-                    fileSystem={fileSystem}
-                    onMoveNode={moveNode}
-                    saveStatus={saveStatus}
-                    notifications={topBarNotifications}
-                    editorMode={editorMode}
-                    onSetEditorMode={setEditorMode}
-                    onOpenSettings={() => setIsSettingsModalOpen(true)}
-                    onOpenAiEndpointSettings={() => setIsAiEndpointSettingsOpen(true)}
-                    onPrint={handlePrint}
-                    zoomLevel={zoomLevel}
-                    setZoomLevel={setZoomLevel}
-                />
-                
-                {isNoteLoading ? (
-                    <div className="flex-1 flex flex-col items-center justify-center bg-white dark:bg-gray-900 transition-colors select-none z-30">
-                        <div className="flex flex-col items-center space-y-4">
-                            <div className="w-10 h-10 border-3 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                            <div className="text-center">
-                                <p className="text-gray-800 dark:text-gray-100 font-semibold text-base tracking-wide">Loading Note...</p>
-                                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">Please wait while the note content is loaded</p>
-                            </div>
-                        </div>
-                    </div>
-                ) : (
-                    <>
-                        {editorMode === 'wysiwyg' && (
-                            <div className="no-print shrink-0"><EditorToolbar editor={editor} /></div>
-                        )}
+          <>
+            <TopBar
+              node={activeNode}
+              breadcrumbs={breadcrumbs}
+              onAiAction={handleAiAction}
+              isAiLoading={aiLoading}
+              onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+              onDelete={() => deleteNode(activeNode.id)}
+              fileSystem={fileSystem}
+              onMoveNode={moveNode}
+              saveStatus={saveStatus}
+              notifications={topBarNotifications}
+              editorMode={editorMode}
+              onSetEditorMode={setEditorMode}
+              onOpenSettings={() => setIsSettingsModalOpen(true)}
+              onOpenAiEndpointSettings={() => setIsAiEndpointSettingsOpen(true)}
+              onPrint={handlePrint}
+              zoomLevel={zoomLevel}
+              setZoomLevel={setZoomLevel}
+            />
 
-                        <div 
-                            className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain relative bg-white dark:bg-gray-900 scroll-smooth" 
-                            id="main-scroll-container"
-                        >
-                    <div className="flex justify-center items-start mx-auto px-4 sm:px-6 md:px-12 pt-4 pb-12 min-h-full transition-all duration-200">
-                      <div 
-                          className="w-full max-w-[840px] xl:max-w-[900px] min-w-0"
-                          style={{ zoom: `${zoomLevel}%` }}
-                      >
-                        
-                        {/* Title */}
-                        <div className="group mb-2">
-                                 <input 
-                                    type="text" 
-                                    value={activeNode.name}
-                                    onChange={(e) => {
-                                        const newName = e.target.value;
-                                        if (activeNoteId) {
-                                            updateNode(activeNoteId, { name: newName });
-                                            notify({ type: 'tree_saved', message: '문서 제목 변경 중...', duration: 1500 });
-                                        }
-                                    }}
-                                    onBlur={() => {
-                                        notify({ type: 'tree_saved', message: '문서 제목 저장됨', duration: 2500 });
-                                    }}
-                                    readOnly={editorMode === 'viewer'}
-                                    placeholder="Untitled"
-                                    spellCheck={false}
-                                    className="w-full text-[3rem] font-black text-[#37352f] dark:text-gray-100 placeholder-gray-300 outline-none border-none bg-transparent"
-                                 />
-                        </div>
-
-                        {/* Tags */}
-                        <TagManager 
-                            tags={activeNode.tags || []} 
-                            onTagsChange={(tags) => activeNoteId && updateTags(activeNoteId, tags)}
-                            suggestions={allTags}
-                        />
-                        
-                        <div className="lg:hidden print:block print-toc">
-                            <TableOfContents 
-                                headings={tocHeadings} 
-                                onNavigate={handleNavigateToHeading} 
-                            />
-                        </div>
-
-                        {/* Editor/Preview */}
-                        <div className="mt-4 h-full">
-                            {editorMode === 'raw' && (
-                                <textarea
-                                    className="w-full h-[calc(100vh-300px)] p-4 font-mono text-sm outline-none resize-none bg-gray-50 dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
-                                    value={editorContent}
-                                    onChange={(e) => {
-                                        const newContent = e.target.value;
-                                        setEditorContent(newContent);
-                                        if (activeNoteId) scheduleSave(activeNoteId, newContent);
-                                    }}
-                                    placeholder="Type markdown here..."
-                                    spellCheck={false}
-                                />
-                            )}
-                            {(editorMode === 'wysiwyg' || editorMode === 'viewer') && (
-                                <TiptapEditor 
-                                    key={activeNoteId + '-' + editorMode}
-                                    noteId={activeNoteId}
-                                    content={editorContent}
-                                    onChange={(noteId, newContent) => {
-                                        if (editorMode === 'viewer') return;
-                                        setEditorContent(newContent);
-                                        scheduleSave(noteId, newContent);
-                                    }}
-                                    setEditor={editorMode === 'viewer' ? () => {} : setEditor}
-                                    onTocUpdate={setTocHeadings}
-                                    editable={editorMode === 'wysiwyg'}
-                                    onAiAction={(prompt, opts) => handleAiAction(prompt, undefined, undefined, undefined, opts?.excludeContent, opts?.wrapCodeBlock)}
-                                    notify={notify}
-                                />
-                            )}
-                        </div>
-                      </div>
-
-                      {/* Desktop Sticky Right TOC */}
-                      <div className="hidden lg:block ml-4 xl:ml-8 shrink-0 sticky top-4">
-                          <DesktopStickyToc
-                              headings={tocHeadings}
-                              title={activeNode.name}
-                              activeId={activeHeadingId}
-                              onNavigate={handleNavigateToHeading}
-                          />
-                      </div>
-                    </div>
+            {isNoteLoading ? (
+              <div className="flex-1 flex flex-col items-center justify-center bg-white dark:bg-gray-900 transition-colors select-none z-30">
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="w-10 h-10 border-3 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                  <div className="text-center">
+                    <p className="text-gray-800 dark:text-gray-100 font-semibold text-base tracking-wide">로딩 중...</p>
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">잠시만 기다려주세요...</p>
+                  </div>
                 </div>
-            </>
-        )}
-    </>
-) : (
-            <div className="flex-1 flex items-center justify-center text-gray-400 flex-col dark:bg-gray-900">
-                <div className="md:hidden absolute top-4 left-4">
-                     <button onClick={() => setIsSidebarOpen(true)} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-                     </button>
-                </div>
-                <p>Select a page to start writing</p>
-                <div className="flex space-x-2 mt-4">
-                    <button 
-                        onClick={() => createNode(undefined, 'note')}
-                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+              </div>
+            ) : (
+              <>
+                {editorMode === 'wysiwyg' && (
+                  <div className="no-print shrink-0"><EditorToolbar editor={editor} /></div>
+                )}
+
+                <div
+                  className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain relative bg-white dark:bg-gray-900 scroll-smooth"
+                  id="main-scroll-container"
+                >
+                  <div className="flex justify-center items-start mx-auto px-4 sm:px-6 md:px-12 pt-4 pb-12 min-h-full transition-all duration-200">
+                    <div
+                      className="w-full max-w-[840px] xl:max-w-[900px] min-w-0"
+                      style={{ zoom: `${zoomLevel}%` }}
                     >
-                        New Page
-                    </button>
+
+                      {/* Title */}
+                      <div className="group mb-2">
+                        <input
+                          type="text"
+                          value={activeNode.name}
+                          onChange={(e) => {
+                            const newName = e.target.value;
+                            if (activeNoteId) {
+                              updateNode(activeNoteId, { name: newName });
+                              notify({ type: 'tree_saved', message: '제목 변경 중...', duration: 1500 });
+                            }
+                          }}
+                          onBlur={() => {
+                            notify({ type: 'tree_saved', message: '제목 저장됨', duration: 2500 });
+                          }}
+                          readOnly={editorMode === 'viewer'}
+                          placeholder="제목 없음"
+                          spellCheck={false}
+                          className="w-full text-[3rem] font-black text-[#37352f] dark:text-gray-100 placeholder-gray-300 outline-none border-none bg-transparent"
+                        />
+                      </div>
+
+                      {/* Tags */}
+                      <TagManager
+                        tags={activeNode.tags || []}
+                        onTagsChange={(tags) => activeNoteId && updateTags(activeNoteId, tags)}
+                        suggestions={allTags}
+                      />
+
+                      <div className="lg:hidden print:block print-toc">
+                        <TableOfContents
+                          headings={tocHeadings}
+                          onNavigate={handleNavigateToHeading}
+                        />
+                      </div>
+
+                      {/* Editor/Preview */}
+                      <div className="mt-4 h-full">
+                        {editorMode === 'raw' && (
+                          <textarea
+                            className="w-full h-[calc(100vh-300px)] p-4 font-mono text-sm outline-none resize-none bg-gray-50 dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
+                            value={editorContent}
+                            onChange={(e) => {
+                              const newContent = e.target.value;
+                              setEditorContent(newContent);
+                              if (activeNoteId) scheduleSave(activeNoteId, newContent);
+                            }}
+                            placeholder="Type markdown here..."
+                            spellCheck={false}
+                          />
+                        )}
+                        {(editorMode === 'wysiwyg' || editorMode === 'viewer') && (
+                          <TiptapEditor
+                            key={activeNoteId + '-' + editorMode}
+                            noteId={activeNoteId}
+                            content={editorContent}
+                            onChange={(noteId, newContent) => {
+                              if (editorMode === 'viewer') return;
+                              setEditorContent(newContent);
+                              scheduleSave(noteId, newContent);
+                            }}
+                            setEditor={editorMode === 'viewer' ? () => { } : setEditor}
+                            onTocUpdate={setTocHeadings}
+                            editable={editorMode === 'wysiwyg'}
+                            onAiAction={(prompt, opts) => handleAiAction(prompt, undefined, undefined, undefined, opts?.excludeContent, opts?.wrapCodeBlock)}
+                            notify={notify}
+                          />
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Desktop Sticky Right TOC */}
+                    <div className="hidden lg:block ml-4 xl:ml-8 shrink-0 sticky top-4">
+                      <DesktopStickyToc
+                        headings={tocHeadings}
+                        title={activeNode.name}
+                        activeId={activeHeadingId}
+                        onNavigate={handleNavigateToHeading}
+                      />
+                    </div>
+                  </div>
                 </div>
+              </>
+            )}
+          </>
+        ) : (
+          <div className="flex-1 flex items-center justify-center text-gray-400 flex-col dark:bg-gray-900">
+            <div className="md:hidden absolute top-4 left-4">
+              <button onClick={() => setIsSidebarOpen(true)} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+              </button>
             </div>
+            <p>노트를 눌러 편집을 시작하세요!</p>
+            <div className="flex space-x-2 mt-4">
+              <button
+                onClick={() => createNode(undefined, 'note')}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+              >
+                새 노트
+              </button>
+            </div>
+          </div>
         )}
       </div>
 
-      <SettingsModal 
+      <SettingsModal
         isOpen={isSettingsModalOpen}
         onClose={() => setIsSettingsModalOpen(false)}
         settings={appSettings}

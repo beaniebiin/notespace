@@ -533,7 +533,7 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({
   onChange,
   setEditor,
   onTocUpdate,
-  placeholder = 'Type something...',
+  placeholder = '클릭하여 입력하세요...',
   editable = true,
   onAiAction,
   notify,
@@ -547,7 +547,7 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({
   useEffect(() => {
     noteIdRef.current = noteId;
   }, [noteId]);
-  // Slash command menu state (Notion-style `/`)
+  // Slash command menu state (notespace-style `/`)
   const [slash, setSlash] = useState<SlashState | null>(null);
   const [slashIndex, setSlashIndex] = useState(0);
   const [aiMode, setAiMode] = useState(false);
@@ -1132,7 +1132,7 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({
               onChangeRef.current(noteIdRef.current, markdown);
             }
           }
-        } catch {}
+        } catch { }
       }
     };
   }, [editor]);
@@ -1259,17 +1259,16 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({
               const currentBlockColor = editor.isActive('heading')
                 ? editor.getAttributes('heading').color
                 : editor.isActive('blockquote')
-                ? editor.getAttributes('blockquote').color
-                : null;
+                  ? editor.getAttributes('blockquote').color
+                  : null;
               const isSelected = currentBlockColor === c.name;
 
               return (
                 <button
                   key={c.name}
                   type="button"
-                  className={`w-5 h-5 rounded-full border border-gray-300 dark:border-gray-600 hover:scale-110 active:scale-95 transition-transform ${
-                    isSelected ? 'ring-2 ring-blue-500 ring-offset-1 dark:ring-offset-gray-800 scale-110' : ''
-                  }`}
+                  className={`w-5 h-5 rounded-full border border-gray-300 dark:border-gray-600 hover:scale-110 active:scale-95 transition-transform ${isSelected ? 'ring-2 ring-blue-500 ring-offset-1 dark:ring-offset-gray-800 scale-110' : ''
+                    }`}
                   style={{ backgroundColor: c.hex }}
                   onClick={() => {
                     if (!editor || editor.isDestroyed || !(editor as any).commandManager) return;
@@ -1279,7 +1278,7 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({
                       } else if (editor.isActive('blockquote')) {
                         editor.chain().focus().updateAttributes('blockquote', { color: c.name }).run();
                       }
-                    } catch (e) {}
+                    } catch (e) { }
                   }}
                   title={c.name}
                 />
@@ -1296,7 +1295,7 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({
                   } else if (editor.isActive('blockquote')) {
                     editor.chain().focus().updateAttributes('blockquote', { color: null }).run();
                   }
-                } catch (e) {}
+                } catch (e) { }
               }}
               title="Clear Color"
             >✕</button>

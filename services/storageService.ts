@@ -85,13 +85,20 @@ export const storageService = {
 
   // --- Settings ---
   getSettings: async (): Promise<any> => {
+    const isSystemDark = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const defaultSettings = { title: 'NoteSpace', logo: 'N', darkMode: isSystemDark, theme: 'system' };
     try {
       const raw = await localFileAdapter.readTextFile('settings.json');
-      if (!raw) return { title: 'NoteSpace', logo: 'N', darkMode: false };
-      return JSON.parse(raw);
+      if (!raw) return defaultSettings;
+      const parsed = JSON.parse(raw);
+      return {
+        ...defaultSettings,
+        ...parsed,
+        theme: parsed.theme || (parsed.darkMode !== undefined ? (parsed.darkMode ? 'dark' : 'light') : 'system'),
+      };
     } catch (e) {
       console.error('Failed to get settings:', e);
-      return { title: 'NoteSpace', logo: 'N', darkMode: false };
+      return defaultSettings;
     }
   },
 

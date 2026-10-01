@@ -417,7 +417,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ editor, onCopyLink }) => 
             className={`
               flex items-center gap-1 px-2.5 py-1 rounded text-xs font-semibold transition-colors
               border border-gray-200 dark:border-gray-700
-              ${showHeadingMenu ? 'bg-blue-50 text-blue-600 border-blue-300 dark:bg-blue-900/30 dark:text-blue-400' : 'bg-gray-50 text-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-750'}
+              ${showHeadingMenu ? 'bg-blue-50 text-blue-600 border-blue-300 dark:bg-blue-900/30 dark:text-blue-400' : 'bg-gray-50 text-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700'}
             `}
             title="본문 및 제목 스타일 (Heading)"
           >
@@ -432,11 +432,10 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ editor, onCopyLink }) => 
                   safeRun(() => editor.chain().focus().setParagraph().run());
                   setShowHeadingMenu(false);
                 }}
-                className={`w-full text-center py-1 rounded text-xs transition-colors font-medium ${
-                  !safeIsActive('heading')
+                className={`w-full text-center py-1 rounded text-xs transition-colors font-medium ${!safeIsActive('heading')
                     ? 'bg-blue-50 text-blue-600 font-bold dark:bg-blue-900/30 dark:text-blue-400'
                     : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
-                }`}
+                  }`}
                 title="본문 (Paragraph)"
               >
                 p
@@ -454,11 +453,10 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ editor, onCopyLink }) => 
                       safeRun(() => editor.chain().focus().toggleHeading({ level: level as any }).run());
                       setShowHeadingMenu(false);
                     }}
-                    className={`py-1 rounded flex items-center justify-center transition-colors ${style} ${
-                      safeIsActive('heading', { level })
+                    className={`py-1 rounded flex items-center justify-center transition-colors ${style} ${safeIsActive('heading', { level })
                         ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'
                         : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
-                    }`}
+                      }`}
                     title={`제목 ${level} (H${level})`}
                   >
                     {label}
@@ -477,11 +475,10 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ editor, onCopyLink }) => 
                       safeRun(() => editor.chain().focus().toggleHeading({ level: level as any }).run());
                       setShowHeadingMenu(false);
                     }}
-                    className={`py-1 rounded flex items-center justify-center transition-colors ${style} ${
-                      safeIsActive('heading', { level })
+                    className={`py-1 rounded flex items-center justify-center transition-colors ${style} ${safeIsActive('heading', { level })
                         ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'
                         : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
-                    }`}
+                      }`}
                     title={`제목 ${level} (H${level})`}
                   >
                     {label}
@@ -606,7 +603,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ editor, onCopyLink }) => 
             className={`
               flex items-center gap-1 px-2 py-1 rounded text-xs transition-colors
               border border-gray-200 dark:border-gray-700
-              ${showSpecialToolsMenu ? 'bg-purple-50 text-purple-600 border-purple-300 dark:bg-purple-900/30 dark:text-purple-400' : 'bg-gray-50 text-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-750'}
+              ${showSpecialToolsMenu ? 'bg-purple-50 text-purple-600 border-purple-300 dark:bg-purple-900/30 dark:text-purple-400' : 'bg-gray-50 text-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'}
             `}
             title="특수 블록 및 도구 삽입 (Special Tools)"
           >
@@ -624,11 +621,10 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ editor, onCopyLink }) => 
                       safeRun(() => editor.chain().focus().toggleBlockquote().run());
                       setShowSpecialToolsMenu(false);
                     }}
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
-                      safeIsActive('blockquote')
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${safeIsActive('blockquote')
                         ? 'bg-purple-50 text-purple-600 dark:bg-purple-900/30 dark:text-purple-300'
                         : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                    }`}
+                      }`}
                     title="인용구 (Quote)"
                   >
                     <Quote size={16} />
@@ -639,11 +635,10 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ editor, onCopyLink }) => 
                       safeRun(() => editor.chain().focus().toggleCodeBlock().run());
                       setShowSpecialToolsMenu(false);
                     }}
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
-                      safeIsActive('codeBlock')
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${safeIsActive('codeBlock')
                         ? 'bg-purple-50 text-purple-600 dark:bg-purple-900/30 dark:text-purple-300'
                         : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                    }`}
+                      }`}
                     title="코드 블럭 (Code Block)"
                   >
                     <Code size={16} />
@@ -778,11 +773,10 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ editor, onCopyLink }) => 
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => safeRun(() => editor.chain().focus().mergeCells().run())}
                     disabled={!canMergeCells(editor)}
-                    className={`px-2 py-1 rounded-lg flex items-center gap-1 text-xs font-medium transition-colors ${
-                      canMergeCells(editor)
+                    className={`px-2 py-1 rounded-lg flex items-center gap-1 text-xs font-medium transition-colors ${canMergeCells(editor)
                         ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 cursor-pointer shadow-2xs'
                         : 'opacity-35 text-gray-400 dark:text-gray-500 cursor-not-allowed'
-                    }`}
+                      }`}
                     title="선택된 셀 병합 (Merge Cells)"
                   >
                     <Merge size={13} />
@@ -793,11 +787,10 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ editor, onCopyLink }) => 
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => safeRun(() => editor.chain().focus().splitCell().run())}
                     disabled={!canSplitCell(editor)}
-                    className={`px-2 py-1 rounded-lg flex items-center gap-1 text-xs font-medium transition-colors ${
-                      canSplitCell(editor)
+                    className={`px-2 py-1 rounded-lg flex items-center gap-1 text-xs font-medium transition-colors ${canSplitCell(editor)
                         ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 cursor-pointer shadow-2xs'
                         : 'opacity-35 text-gray-400 dark:text-gray-500 cursor-not-allowed'
-                    }`}
+                      }`}
                     title="병합된 셀 분할 (Split Cell)"
                   >
                     <Split size={13} />
@@ -832,7 +825,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ editor, onCopyLink }) => 
               <div className="h-[1px] bg-gray-100 dark:bg-gray-700" />
 
               {/* 3행: 9개 셀 정렬 매트릭스 (수평 3 × 수직 3) */}
-              <div className="bg-gray-50 dark:bg-gray-750/50 p-1.5 rounded-xl border border-gray-100 dark:border-gray-700/60">
+              <div className="bg-gray-50 dark:bg-gray-700/50 p-1.5 rounded-xl border border-gray-100 dark:border-gray-700/60">
                 <div className="flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400 mb-1.5 px-0.5">
                   <span className="font-medium">셀 내부 정렬 (3×3)</span>
                   <span className="text-[10px] text-purple-600 dark:text-purple-400 font-semibold">
@@ -848,11 +841,10 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ editor, onCopyLink }) => 
                         type="button"
                         onMouseDown={(e) => e.preventDefault()}
                         onClick={() => safeRun(() => setTableCellAlignment(editor, item.align, item.valign))}
-                        className={`w-full py-1 rounded-md flex items-center justify-center transition-all cursor-pointer border ${
-                          isSelected
+                        className={`w-full py-1 rounded-md flex items-center justify-center transition-all cursor-pointer border ${isSelected
                             ? 'bg-purple-100 text-purple-700 border-purple-300 dark:bg-purple-900/60 dark:text-purple-300 dark:border-purple-500 font-semibold shadow-xs'
                             : 'bg-white dark:bg-gray-800 text-gray-400 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-700 dark:hover:text-gray-200'
-                        }`}
+                          }`}
                         title={item.label}
                       >
                         <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="currentColor">
@@ -875,11 +867,10 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ editor, onCopyLink }) => 
                   onClick={() => safeRun(() => {
                     setCellFontSize(editor, 'normal');
                   })}
-                  className={`flex-1 py-1 px-1.5 rounded-md flex items-center justify-center gap-1 transition-all cursor-pointer ${
-                    !isCurrentCellSmallText(editor)
+                  className={`flex-1 py-1 px-1.5 rounded-md flex items-center justify-center gap-1 transition-all cursor-pointer ${!isCurrentCellSmallText(editor)
                       ? 'bg-white dark:bg-gray-800 text-purple-600 dark:text-purple-300 shadow-sm font-semibold'
                       : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
-                  }`}
+                    }`}
                   title="선택된 셀 기본 글씨 (1.15rem, 400)"
                 >
                   <Type size={13} />
@@ -891,11 +882,10 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ editor, onCopyLink }) => 
                   onClick={() => safeRun(() => {
                     setCellFontSize(editor, 'small');
                   })}
-                  className={`flex-1 py-1 px-1.5 rounded-md flex items-center justify-center gap-1 transition-all cursor-pointer ${
-                    isCurrentCellSmallText(editor)
+                  className={`flex-1 py-1 px-1.5 rounded-md flex items-center justify-center gap-1 transition-all cursor-pointer ${isCurrentCellSmallText(editor)
                       ? 'bg-white dark:bg-gray-800 text-purple-600 dark:text-purple-300 shadow-sm font-semibold'
                       : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
-                  }`}
+                    }`}
                   title="선택된 셀 작은 글씨 (1.05rem, 300)"
                 >
                   <Type size={11} />
@@ -996,7 +986,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({ editor, onCopyLink }) => 
         isOpen={isLinkModalOpen}
         onClose={() => setIsLinkModalOpen(false)}
         onSubmit={handleWebsiteBlockSubmit}
-        title="Add Website Bookmark"
+        title="웹사이트 모달 추가하기"
       />
 
       <ImageManagerModal
