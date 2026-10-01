@@ -1,6 +1,6 @@
 [package]
 name = "notespace"
-version = "0.1.0"
+version = "0.1.1"
 description = "주권이 완비된 마크다운 노트"
 authors = ["beaniebiin"]
 license = ""
