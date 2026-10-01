@@ -1,0 +1,66 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    name: Build Windows (.exe)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Setup Rust (stable)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Cache Rust build artifacts
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build Tauri app (Windows)
+        run: npm run build:app -- --target x86_64-pc-windows-msvc
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload .exe artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: notespace-windows-exe
+          path: src-tauri/target/x86_64-pc-windows-msvc/release/notespace.exe
+          if-no-files-found: error
+
+      - name: Upload .msi installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: notespace-windows-msi
+          path: src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi/*.msi
+          if-no-files-found: warn
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            src-tauri/target/x86_64-pc-windows-msvc/release/notespace.exe
+            src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi/*.msi
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-') }}
