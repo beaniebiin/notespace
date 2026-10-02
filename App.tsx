@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { FileSystemNode, SidebarView, AppSettings } from './types';
 import Sidebar from './components/Sidebar';
 import TopBar from './components/TopBar';
@@ -545,9 +545,20 @@ const App: React.FC = () => {
     }
   }, []);
 
-  const activeNode = activeNoteId ? findNode(fileSystem, activeNoteId) : null;
-  const breadcrumbs = activeNoteId ? findPath(fileSystem, activeNoteId) || [] : [];
-  const allTags = collectTags(fileSystem);
+  // Memoize active node, breadcrumbs, and tag collection to avoid expensive
+  // recursive fileSystem traversals on every render (e.g. scrollspy updates, status changes, zoom).
+  const activeNode = useMemo(
+    () => (activeNoteId ? findNode(fileSystem, activeNoteId) : null),
+    [fileSystem, activeNoteId]
+  );
+  const breadcrumbs = useMemo(
+    () => (activeNoteId ? findPath(fileSystem, activeNoteId) || [] : []),
+    [fileSystem, activeNoteId]
+  );
+  const allTags = useMemo(
+    () => collectTags(fileSystem),
+    [fileSystem]
+  );
 
   return (
     <div className="flex h-[100dvh] w-screen overflow-hidden bg-white dark:bg-gray-950 text-[#37352f] dark:text-gray-100">
