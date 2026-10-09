@@ -18,11 +18,24 @@ interface TokenGroup {
   stem: string | null;
 }
 
+// Bounded cache for cleanMarkdown to avoid re-parsing static note content on every search keystroke
+const cleanMarkdownCache = new Map<string, { clean: string; nospace: string }>();
+const MAX_CLEAN_MARKDOWN_CACHE_SIZE = 500;
+
 /**
- * Clean markdown syntax and HTML tags to generate searchable plain text
+ * Clean markdown syntax and HTML tags to generate searchable plain text.
+ * Cached to prevent running multiple complex regex operations repeatedly per search keypress.
  */
 export function cleanMarkdown(markdown: string): { clean: string; nospace: string } {
   if (!markdown) return { clean: '', nospace: '' };
+
+  const cached = cleanMarkdownCache.get(markdown);
+  if (cached) {
+    // Refresh insertion order for LRU-style behavior
+    cleanMarkdownCache.delete(markdown);
+    cleanMarkdownCache.set(markdown, cached);
+    return cached;
+  }
 
   let text = markdown;
   // Remove markdown images: ![alt](url)
@@ -37,7 +50,18 @@ export function cleanMarkdown(markdown: string): { clean: string; nospace: strin
   text = text.replace(/\s+/g, ' ').trim();
 
   const nospace = text.replace(/\s+/g, '');
-  return { clean: text, nospace };
+  const result = { clean: text, nospace };
+
+  if (cleanMarkdownCache.size >= MAX_CLEAN_MARKDOWN_CACHE_SIZE) {
+    // Evict oldest entry (LRU)
+    const firstKey = cleanMarkdownCache.keys().next().value;
+    if (firstKey !== undefined) {
+      cleanMarkdownCache.delete(firstKey);
+    }
+  }
+  cleanMarkdownCache.set(markdown, result);
+
+  return result;
 }
 
 /**
