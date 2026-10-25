@@ -91,12 +91,26 @@ async fn fetch_url_metadata(url: String) -> Result<UrlMetadata, String> {
     })
 }
 
+#[tauri::command]
+async fn fetch_law_api(url: String) -> Result<String, String> {
+    let client = reqwest::Client::builder()
+        .user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+        .timeout(std::time::Duration::from_secs(12))
+        .danger_accept_invalid_certs(true)
+        .build()
+        .map_err(|e| e.to_string())?;
+
+    let resp = client.get(&url).send().await.map_err(|e| e.to_string())?;
+    let body = resp.text().await.map_err(|e| e.to_string())?;
+    Ok(body)
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
-        .invoke_handler(tauri::generate_handler![fetch_url_preview, fetch_url_metadata])
+        .invoke_handler(tauri::generate_handler![fetch_url_preview, fetch_url_metadata, fetch_law_api])
         .setup(|app| {
             if cfg!(debug_assertions) {
                 app.handle().plugin(

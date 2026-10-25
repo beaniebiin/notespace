@@ -4,7 +4,8 @@ import Sidebar from './components/Sidebar';
 import TopBar from './components/TopBar';
 import TiptapEditor from './components/TiptapEditor';
 import EditorToolbar from './components/EditorToolbar';
-import TableOfContents, { DesktopStickyToc } from './components/TableOfContents';
+import TableOfContents from './components/TableOfContents';
+import RightSidebar from './components/RightSidebar';
 import { TagManager } from './components/TagManager';
 import SettingsModal from './components/SettingsModal';
 import MarkdownRenderer from './components/MarkdownRenderer';
@@ -70,6 +71,7 @@ const App: React.FC = () => {
     pendingFiles?: { mimeType: string; data: string }[];
     pendingExcludeContent?: boolean;
     pendingWrapCodeBlock?: boolean;
+    pendingSystemInstruction?: string;
   }>({
     isOpen: false,
     failedEndpointName: '',
@@ -95,6 +97,32 @@ const App: React.FC = () => {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [sidebarView, setSidebarView] = useState<SidebarView>(SidebarView.FILES);
+  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem('notespace_right_sidebar_open');
+      return saved !== null ? saved === 'true' : true;
+    } catch {
+      return true;
+    }
+  });
+
+  const handleToggleRightSidebar = useCallback(() => {
+    setIsRightSidebarOpen((prev) => {
+      const next = !prev;
+      if (next && typeof window !== 'undefined' && window.innerWidth < 768) {
+        setIsSidebarOpen(false);
+      }
+      try {
+        localStorage.setItem('notespace_right_sidebar_open', String(next));
+      } catch { }
+      return next;
+    });
+  }, []);
+
+  const handleInsertMarkdown = useCallback((markdown: string) => {
+    if (!editor || !markdown) return;
+    editor.chain().focus().insertContent(markdown).run();
+  }, [editor]);
 
   const [aiLoading, setAiLoading] = useState(false);
   const [tocHeadings, setTocHeadings] = useState<{ id: string; text: string; level: number; color?: string }[]>([]);
@@ -419,11 +447,12 @@ const App: React.FC = () => {
 
   const handleAiAction = async (
     prompt: string,
-    files?: { mimeType: string; data: string }[],
+    files?: { mimeType: string; data: string; name?: string }[],
     targetEndpointId?: string | number,
     targetModel?: string,
     excludeContent?: boolean,
-    wrapCodeBlock?: boolean
+    wrapCodeBlock?: boolean,
+    systemInstruction?: string
   ) => {
     if (!activeNoteId || !editor) return;
     setAiLoading(true);
@@ -438,6 +467,7 @@ const App: React.FC = () => {
         files,
         endpointId: targetEndpointId,
         model: targetModel,
+        systemInstruction,
       });
 
       if (outcome.status === 'success') {
@@ -466,7 +496,8 @@ const App: React.FC = () => {
             pendingPrompt: prompt,
             pendingFiles: files,
             pendingExcludeContent: excludeContent,
-            pendingWrapCodeBlock: wrapCodeBlock
+            pendingWrapCodeBlock: wrapCodeBlock,
+            pendingSystemInstruction: systemInstruction,
           });
         } else {
           alert(`AI 생성 실패: ${outcome.error || '모든 엔드포인트 처리 실패'}`);
@@ -483,9 +514,9 @@ const App: React.FC = () => {
   };
 
   const handleConfirmFallback = () => {
-    const { pendingPrompt, pendingFiles, nextEndpointId, pendingExcludeContent, pendingWrapCodeBlock } = fallbackState;
+    const { pendingPrompt, pendingFiles, nextEndpointId, pendingExcludeContent, pendingWrapCodeBlock, pendingSystemInstruction } = fallbackState;
     setFallbackState(prev => ({ ...prev, isOpen: false }));
-    handleAiAction(pendingPrompt, pendingFiles, nextEndpointId, undefined, pendingExcludeContent, pendingWrapCodeBlock);
+    handleAiAction(pendingPrompt, pendingFiles, nextEndpointId, undefined, pendingExcludeContent, pendingWrapCodeBlock, pendingSystemInstruction);
   };
 
   // Scrollspy to synchronize TOC active heading with document scroll
@@ -620,6 +651,8 @@ const App: React.FC = () => {
               onPrint={handlePrint}
               zoomLevel={zoomLevel}
               setZoomLevel={setZoomLevel}
+              onToggleRightSidebar={handleToggleRightSidebar}
+              isRightSidebarOpen={isRightSidebarOpen}
             />
 
             {isNoteLoading ? (
@@ -718,16 +751,6 @@ const App: React.FC = () => {
                         )}
                       </div>
                     </div>
-
-                    {/* Desktop Sticky Right TOC */}
-                    <div className="hidden lg:block ml-4 xl:ml-8 shrink-0 sticky top-4">
-                      <DesktopStickyToc
-                        headings={tocHeadings}
-                        title={activeNode.name}
-                        activeId={activeHeadingId}
-                        onNavigate={handleNavigateToHeading}
-                      />
-                    </div>
                   </div>
                 </div>
               </>
@@ -752,6 +775,24 @@ const App: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Dedicated Pluggable Right Sidebar (full-height, not blocked by TopBar) */}
+      {activeNode && (
+        <RightSidebar
+          isOpen={isRightSidebarOpen}
+          onToggle={handleToggleRightSidebar}
+          headings={tocHeadings}
+          activeHeadingId={activeHeadingId}
+          onNavigateHeading={handleNavigateToHeading}
+          activeNoteId={activeNoteId}
+          activeNoteTitle={activeNode.name}
+          editorContent={editorContent}
+          onInsertMarkdown={handleInsertMarkdown}
+          onAiAction={handleAiAction}
+          isAiLoading={aiLoading}
+          onOpenAiEndpointSettings={() => setIsAiEndpointSettingsOpen(true)}
+        />
+      )}
 
       <SettingsModal
         isOpen={isSettingsModalOpen}

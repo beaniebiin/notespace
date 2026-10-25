@@ -137,7 +137,8 @@ export const generateNoteContentViaProxy = async (
   currentContent: string = "",
   attachments: Attachment[] = [],
   endpointId?: string | number,
-  selectedModel?: string
+  selectedModel?: string,
+  customSystemInstruction?: string
 ): Promise<AiGenerateResult> => {
   const config = await getAiEndpoints();
   const endpoints = config.answer_endpoints || [];
@@ -181,7 +182,7 @@ export const generateNoteContentViaProxy = async (
     }
   }
 
-  const systemInstruction = 
+  const defaultSystemInstruction =
     "You are an AI assistant in a Markdown note-taking app.\n" +
     "Provide the response in clean Markdown format.\n" +
     "If the user asks to summarize, provide a summary.\n" +
@@ -189,6 +190,10 @@ export const generateNoteContentViaProxy = async (
     "If images or files are provided, use them as context.\n" +
     "Do not wrap the whole response in markdown code blocks unless specifically asked for code.\n" +
     "Return the raw markdown content directly.";
+
+  const systemInstruction = customSystemInstruction?.trim()
+    ? `${customSystemInstruction.trim()}\n\n---\n${defaultSystemInstruction}`
+    : defaultSystemInstruction;
 
   const messages = [
     { role: 'system', content: systemInstruction },
@@ -287,4 +292,161 @@ export const generateNoteContentViaProxy = async (
     status: 'endpoint_failed',
     error: lastError || '모든 AI 엔드포인트 요청에 실패했습니다.'
   };
+};
+
+export interface SkillItem {
+  id: string;
+  title: string;
+  description: string;
+  system_prompt: string;
+  sort_order: number;
+  created_at: number;
+  updated_at: number;
+}
+
+export const DEFAULT_SKILLS: SkillItem[] = [
+  {
+    id: 'skill-summarize',
+    title: '핵심 요약',
+    description: '문서의 주요 핵심 내용과 결론을 글머리 기호로 명확히 정리합니다.',
+    system_prompt: '다음 제공된 텍스트를 분석하여 핵심 주제, 주요 논점, 결론으로 나누어 간결하고 명확한 Markdown 글머리 기호 목록으로 요약하세요.',
+    sort_order: 1,
+    created_at: 1700000000000,
+    updated_at: 1700000000000,
+  },
+  {
+    id: 'skill-refine',
+    title: '문장 다듬기',
+    description: '어색한 문장과 오탈자를 교정하고 매끄럽고 전문적인 톤으로 윤문합니다.',
+    system_prompt: '다음 텍스트의 어색한 문맥, 비문, 오탈자를 교정하고, 의미는 그대로 유지하면서 더욱 명료하고 전문적인 톤이 되도록 Markdown 형식으로 다듬어주세요.',
+    sort_order: 2,
+    created_at: 1700000001000,
+    updated_at: 1700000001000,
+  },
+];
+
+const cloneDefaultSkills = (): SkillItem[] => JSON.parse(JSON.stringify(DEFAULT_SKILLS));
+
+export const getSkills = async (): Promise<SkillItem[]> => {
+  try {
+    const raw = await localFileAdapter.readTextFile('skills.json');
+    if (!raw) {
+      // 최초 실행 시 기본 프리셋 자동 로드 및 저장
+      const initial = cloneDefaultSkills();
+      await localFileAdapter.writeTextFile('skills.json', JSON.stringify(initial, null, 2));
+      return initial;
+    }
+    const data = JSON.parse(raw);
+    if (Array.isArray(data)) {
+      if (data.length === 0) {
+        return cloneDefaultSkills();
+      }
+      return data.sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+    }
+    return cloneDefaultSkills();
+  } catch (e) {
+    console.error('Failed to load skills from local storage', e);
+    return cloneDefaultSkills();
+  }
+};
+
+export const saveSkill = async (
+  skill: Partial<SkillItem> & { title: string; system_prompt: string }
+): Promise<SkillItem> => {
+  const skills = await getSkills();
+  const now = Date.now();
+  let updatedSkill: SkillItem;
+
+  if (skill.id) {
+    const idx = skills.findIndex((s) => s.id === skill.id);
+    if (idx !== -1) {
+      updatedSkill = {
+        ...skills[idx],
+        ...skill,
+        title: skill.title.trim(),
+        description: (skill.description ?? skills[idx].description ?? '').trim(),
+        system_prompt: skill.system_prompt.trim(),
+        updated_at: now,
+      };
+      skills[idx] = updatedSkill;
+    } else {
+      updatedSkill = {
+        id: skill.id,
+        title: skill.title.trim(),
+        description: (skill.description || '').trim(),
+        system_prompt: skill.system_prompt.trim(),
+        sort_order: skill.sort_order ?? (skills.length + 1),
+        created_at: skill.created_at ?? now,
+        updated_at: now,
+      };
+      skills.push(updatedSkill);
+    }
+  } else {
+    const newId = `skill-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+    updatedSkill = {
+      id: newId,
+      title: skill.title.trim(),
+      description: (skill.description || '').trim(),
+      system_prompt: skill.system_prompt.trim(),
+      sort_order: skills.length + 1,
+      created_at: now,
+      updated_at: now,
+    };
+    skills.push(updatedSkill);
+  }
+
+  skills.sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+  await localFileAdapter.writeTextFile('skills.json', JSON.stringify(skills, null, 2));
+  return updatedSkill;
+};
+
+export const deleteSkill = async (id: string): Promise<boolean> => {
+  try {
+    const skills = await getSkills();
+    const filtered = skills.filter((s) => s.id !== id);
+    if (filtered.length === skills.length) return false;
+    await localFileAdapter.writeTextFile('skills.json', JSON.stringify(filtered, null, 2));
+    return true;
+  } catch (e) {
+    console.error('Failed to delete skill', e);
+    return false;
+  }
+};
+
+export const reorderSkills = async (orderedIds: string[]): Promise<boolean> => {
+  try {
+    const skills = await getSkills();
+    const skillMap = new Map(skills.map((s) => [s.id, s]));
+    const reordered: SkillItem[] = [];
+
+    orderedIds.forEach((id, index) => {
+      const s = skillMap.get(id);
+      if (s) {
+        reordered.push({ ...s, sort_order: index + 1, updated_at: Date.now() });
+        skillMap.delete(id);
+      }
+    });
+
+    let nextOrder = reordered.length + 1;
+    for (const remaining of skillMap.values()) {
+      reordered.push({ ...remaining, sort_order: nextOrder++ });
+    }
+
+    await localFileAdapter.writeTextFile('skills.json', JSON.stringify(reordered, null, 2));
+    return true;
+  } catch (e) {
+    console.error('Failed to reorder skills', e);
+    return false;
+  }
+};
+
+export const resetSkillsToDefault = async (): Promise<SkillItem[]> => {
+  try {
+    const initial = cloneDefaultSkills();
+    await localFileAdapter.writeTextFile('skills.json', JSON.stringify(initial, null, 2));
+    return initial;
+  } catch (e) {
+    console.error('Failed to reset skills to default', e);
+    return cloneDefaultSkills();
+  }
 };

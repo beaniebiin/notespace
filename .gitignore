@@ -2,7 +2,7 @@
 node_modules/
 .pnp
 .pnp.js
-
+forward_php_version
 # Production & Build outputs
 dist/
 dist-ssr/

@@ -124,6 +124,9 @@ const DARK_SURFACE_HEX: Record<HighlightName, string> = {
 export const DARK_MARK_ALPHA = 0.1;
 export const DARK_TABLE_ALPHA = 0.75;
 
+// 하이라이트 색상 5종 + 테이블 전용 그레이를 포함하는 정적 불변 배열 (GC 부하 방지)
+const ALL_THEME_COLORS = [...HIGHLIGHT_COLORS, TABLE_GRAY] as const;
+
 // 테마별 변수 세트를 순수 계산한다. 인라인 변수가 .dark 규칙을 가리므로
 // 다크값도 여기서 써야 다크모드에 반영된다.
 export const varsForTheme = (
@@ -131,7 +134,7 @@ export const varsForTheme = (
   isDark: boolean
 ): Record<string, string> => {
   const out: Record<string, string> = {};
-  for (const e of [...HIGHLIGHT_COLORS, TABLE_GRAY]) {
+  for (const e of ALL_THEME_COLORS) {
     if (!isDark) {
       out[`--hl-${e.name}`] = markRgba(e.name, level);
       out[`--hl-h-${e.name}`] = surfaceRgba(e.name, 'heading');

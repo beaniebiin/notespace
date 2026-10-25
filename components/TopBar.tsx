@@ -2,11 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
     MoreHorizontal, Sparkles, LayoutPanelLeft, Edit3, Eye, Code, Upload, Send, Paperclip,
     Trash2, Download, Printer, FolderInput, Folder, X, File, Settings, Server, Layers,
-    Check, AlertCircle, Archive
+    Check, AlertCircle, Archive, PanelRight, PanelRightClose
 } from 'lucide-react';
 import { FileSystemNode, SaveStatusInfo, SaveStatusState, TopBarNotification } from '../types';
 import { storageService } from '../services/storageService';
-import { getAiEndpoints, AiEndpoint } from '../services/geminiService';
 import { collectFolders, isDescendant } from '../services/tree-model';
 
 interface TopBarProps {
@@ -28,65 +27,25 @@ interface TopBarProps {
     onPrint?: () => void;
     zoomLevel: number;
     setZoomLevel: (zoom: number) => void;
+    onToggleRightSidebar?: () => void;
+    isRightSidebarOpen?: boolean;
 }
 
 const TopBar: React.FC<TopBarProps> = ({
     node, breadcrumbs, onAiAction, isAiLoading, onToggleSidebar,
     onDelete, fileSystem, onMoveNode, saveStatus, notifications = [], editorMode, onSetEditorMode, onOpenSettings,
-    onOpenAiEndpointSettings, onPrint, zoomLevel, setZoomLevel
+    onOpenAiEndpointSettings, onPrint, zoomLevel, setZoomLevel,
+    onToggleRightSidebar, isRightSidebarOpen = true
 }) => {
-    const [showAiMenu, setShowAiMenu] = useState(false);
     const [showOptionsMenu, setShowOptionsMenu] = useState(false);
     const [showModeMenu, setShowModeMenu] = useState(false);
     const [showMoveModal, setShowMoveModal] = useState(false);
-    const [customPrompt, setCustomPrompt] = useState('');
-    const [attachments, setAttachments] = useState<{ mimeType: string, data: string, name: string }[]>([]);
-    const [endpoints, setEndpoints] = useState<AiEndpoint[]>([]);
-    const [selectedEndpointId, setSelectedEndpointId] = useState<string | number>('');
-    const [selectedModel, setSelectedModel] = useState<string>('');
-    const [excludeContent, setExcludeContent] = useState(false);
-    const [isDragging, setIsDragging] = useState(false);
-    const fileInputRef = useRef<HTMLInputElement>(null);
     const zipUploadInputRef = useRef<HTMLInputElement>(null);
-
-    // Fetch endpoints when menu opens
-    useEffect(() => {
-        if (showAiMenu) {
-            getAiEndpoints().then(data => {
-                const list = data.answer_endpoints || [];
-                setEndpoints(list);
-                if (list.length > 0) {
-                    const currentEp = list.find(e => String(e.id) === String(selectedEndpointId)) || list[0];
-                    setSelectedEndpointId(currentEp.id);
-                    const models = currentEp.models || [];
-                    if (!selectedModel || !models.includes(selectedModel)) {
-                        setSelectedModel(models[0] || '');
-                    }
-                }
-            }).catch(e => console.error("Failed to fetch endpoints", e));
-        }
-    }, [showAiMenu]);
-
-    const activeEndpoint = endpoints.find(e => String(e.id) === String(selectedEndpointId)) || endpoints[0];
-    const availableModels = activeEndpoint?.models || [];
-
-    const handleEndpointChange = (epId: string) => {
-        setSelectedEndpointId(epId);
-        const ep = endpoints.find(e => String(e.id) === String(epId));
-        if (ep && ep.models && ep.models.length > 0) {
-            setSelectedModel(ep.models[0]);
-        } else {
-            setSelectedModel('');
-        }
-    };
 
     // Close menus when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             const target = event.target as HTMLElement;
-            if (!target.closest('.ai-menu-container')) {
-                setShowAiMenu(false);
-            }
             if (!target.closest('.options-menu-container') && !showMoveModal) {
                 setShowOptionsMenu(false);
             }
@@ -97,67 +56,6 @@ const TopBar: React.FC<TopBarProps> = ({
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [showMoveModal]);
-
-    const handleAiClick = (prompt: string) => {
-        onAiAction(prompt, attachments, selectedEndpointId, selectedModel, excludeContent);
-        setCustomPrompt('');
-        setAttachments([]);
-        setShowAiMenu(false);
-    };
-
-    const processFile = (file: File) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            const base64String = (reader.result as string).split(',')[1];
-
-            let mimeType = file.type;
-            if (!mimeType || mimeType.trim() === '') {
-                const name = file.name.toLowerCase();
-                if (name.endsWith('.pdf')) {
-                    mimeType = 'application/pdf';
-                } else if (name.endsWith('.png')) {
-                    mimeType = 'image/png';
-                } else if (name.endsWith('.jpg') || name.endsWith('.jpeg')) {
-                    mimeType = 'image/jpeg';
-                } else if (name.endsWith('.webp')) {
-                    mimeType = 'image/webp';
-                } else if (name.endsWith('.gif')) {
-                    mimeType = 'image/gif';
-                }
-            }
-
-            setAttachments(prev => [...prev, {
-                mimeType: mimeType || 'application/pdf',
-                data: base64String,
-                name: file.name
-            }]);
-        };
-        reader.readAsDataURL(file);
-    };
-
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            processFile(e.target.files[0]);
-        }
-    };
-
-    const handleDragOver = (e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(true);
-    };
-
-    const handleDragLeave = (e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(false);
-    };
-
-    const handleDrop = (e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(false);
-        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            processFile(e.dataTransfer.files[0]);
-        }
-    };
 
     const handleExportMarkdown = async () => {
         if (!node) return;
@@ -489,176 +387,6 @@ const TopBar: React.FC<TopBarProps> = ({
                             )}
                         </div>
 
-                        {/* AI Button */}
-                        <div className="relative ai-menu-container">
-                            <button
-                                onClick={() => setShowAiMenu(!showAiMenu)}
-                                onContextMenu={(e) => {
-                                    e.preventDefault();
-                                    if (onOpenAiEndpointSettings) {
-                                        onOpenAiEndpointSettings();
-                                    }
-                                }}
-                                disabled={isAiLoading}
-                                className={`p-1 rounded text-sm font-medium transition-colors
-                            ${isAiLoading
-                                        ? 'text-gray-400 cursor-wait'
-                                        : 'text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20'
-                                    }
-                        `}
-                                title="AI 메뉴 (좌클릭) / AI 엔드포인트 설정 (우클릭)"
-                            >
-                                <Sparkles size={18} className={isAiLoading ? "animate-pulse" : ""} />
-                            </button>
-
-                            {showAiMenu && (
-                                <div className="fixed left-3 right-3 top-14 sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-2 sm:w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden py-1 z-50">
-                                    <div className="p-3">
-
-                                        {/* Dual Dropdown Section (Endpoint -> Model) */}
-                                        <div className="mb-3 p-2.5 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-200/80 dark:border-gray-700 space-y-2">
-                                            <div className="flex items-center justify-between text-[11px] font-bold text-gray-700 dark:text-gray-200">
-                                                <span className="flex items-center gap-1.5">
-                                                    <Server size={13} className="text-purple-600 dark:text-purple-400" />
-                                                    엔드포인트 & 모델 선택
-                                                </span>
-                                                {onOpenAiEndpointSettings && (
-                                                    <button
-                                                        onClick={() => {
-                                                            setShowAiMenu(false);
-                                                            onOpenAiEndpointSettings();
-                                                        }}
-                                                        className="text-[10px] text-purple-600 dark:text-purple-400 hover:underline"
-                                                    >
-                                                        관리
-                                                    </button>
-                                                )}
-                                            </div>
-
-                                            {/* 1. Endpoint Selector */}
-                                            <div>
-                                                <label className="block text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-0.5">
-                                                    1. 엔드포인트 선택
-                                                </label>
-                                                <select
-                                                    value={String(selectedEndpointId)}
-                                                    onChange={e => handleEndpointChange(e.target.value)}
-                                                    className="w-full text-xs font-semibold bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-600 rounded-lg px-2.5 py-1.5 outline-none focus:border-purple-500 transition-colors"
-                                                >
-                                                    {endpoints.map(ep => (
-                                                        <option key={ep.id} value={String(ep.id)}>
-                                                            {ep.name}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                            </div>
-
-                                            {/* 2. Model Selector */}
-                                            <div>
-                                                <label className="block text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-0.5 flex items-center justify-between">
-                                                    <span>2. 모델 선택 (1순위)</span>
-                                                    <span className="text-[9px] text-purple-600 dark:text-purple-400 font-normal">* 실패시 하위 모델로 순차 폴백</span>
-                                                </label>
-                                                <select
-                                                    value={selectedModel}
-                                                    onChange={e => setSelectedModel(e.target.value)}
-                                                    className="w-full text-xs font-mono font-semibold bg-white dark:bg-gray-800 text-purple-700 dark:text-purple-300 border border-gray-200 dark:border-gray-600 rounded-lg px-2.5 py-1.5 outline-none focus:border-purple-500 transition-colors"
-                                                >
-                                                    {availableModels.map(m => (
-                                                        <option key={m} value={m}>
-                                                            {m}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div className="h-[1px] bg-gray-100 dark:bg-gray-700 my-2.5"></div>
-
-                                        {/* Attachment Zone */}
-                                        <div
-                                            className={`
-                                        border-2 border-dashed rounded-lg p-3 mb-2.5 text-center transition-colors cursor-pointer
-                                        ${isDragging ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'}
-                                    `}
-                                            onDragOver={handleDragOver}
-                                            onDragLeave={handleDragLeave}
-                                            onDrop={handleDrop}
-                                            onClick={() => fileInputRef.current?.click()}
-                                        >
-                                            <div className="flex flex-col items-center justify-center text-gray-400 space-y-0.5">
-                                                <Upload size={18} />
-                                                <span className="text-[11px]">파일 첨부 (이미지 / PDF)</span>
-                                            </div>
-                                            <input
-                                                type="file"
-                                                ref={fileInputRef}
-                                                className="hidden"
-                                                onChange={handleFileChange}
-                                                accept="image/*,text/*,application/pdf,.pdf"
-                                            />
-                                        </div>
-
-                                        {attachments.length > 0 && (
-                                            <div className="mb-2.5 space-y-1 max-h-24 overflow-y-auto">
-                                                {attachments.map((att, idx) => (
-                                                    <div key={idx} className="flex items-center justify-between text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1.5 rounded text-gray-700 dark:text-gray-200">
-                                                        <div className="flex items-center truncate">
-                                                            <File size={12} className="mr-2 text-gray-500" />
-                                                            <span className="truncate max-w-[180px]">{att.name}</span>
-                                                        </div>
-                                                        <button
-                                                            onClick={() => setAttachments(prev => prev.filter((_, i) => i !== idx))}
-                                                            className="text-gray-400 hover:text-red-500 ml-2"
-                                                        >
-                                                            ✕
-                                                        </button>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-
-                                        <div className="flex items-center bg-gray-50 dark:bg-gray-700 rounded-lg px-2 py-1 border border-transparent focus-within:border-purple-200 dark:focus-within:border-purple-800 focus-within:ring-2 focus-within:ring-purple-100 dark:focus-within:ring-purple-900">
-                                            <input
-                                                type="text"
-                                                placeholder="AI에게 질문 또는 프롬프트 입력..."
-                                                className="bg-transparent border-none outline-none text-xs w-full py-1.5 text-gray-900 dark:text-white placeholder-gray-400"
-                                                value={customPrompt}
-                                                onChange={(e) => setCustomPrompt(e.target.value)}
-                                                onKeyDown={(e) => {
-                                                    if (e.key === 'Enter' && customPrompt.trim()) {
-                                                        handleAiClick(customPrompt);
-                                                    }
-                                                }}
-                                                autoFocus
-                                            />
-                                            <button
-                                                className="p-1.5 text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 rounded hover:bg-purple-100 dark:hover:bg-purple-900/20 transition-colors shrink-0"
-                                                onClick={() => customPrompt.trim() && handleAiClick(customPrompt)}
-                                            >
-                                                <Send size={14} />
-                                            </button>
-                                        </div>
-
-                                        <label
-                                            className="flex items-center gap-1.5 mt-2 cursor-pointer select-none"
-                                            title="체크 시 현재 노트 내용 없이 작성한 질문만 AI에 전송됩니다"
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                checked={excludeContent}
-                                                onChange={(e) => setExcludeContent(e.target.checked)}
-                                                className="w-3.5 h-3.5 rounded accent-purple-600 cursor-pointer"
-                                            />
-                                            <span className="text-[11px] text-gray-500 dark:text-gray-400">
-                                                노트 내용 반영 해제하기
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
                         <div className="h-4 w-[1px] bg-gray-200 dark:bg-gray-700 mx-1 sm:mx-2"></div>
 
                         {/* Zoom Controls */}
@@ -757,6 +485,22 @@ const TopBar: React.FC<TopBarProps> = ({
                                 </div>
                             )}
                         </div>
+
+                        {onToggleRightSidebar && (
+                            <button
+                                type="button"
+                                onClick={onToggleRightSidebar}
+                                className={`p-1.5 rounded-lg text-sm font-medium transition-colors border cursor-pointer ${
+                                    isRightSidebarOpen
+                                        ? 'bg-blue-50 border-blue-200 text-blue-600 dark:bg-blue-900/40 dark:border-blue-700 dark:text-blue-400'
+                                        : 'text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 border-transparent'
+                                }`}
+                                title={isRightSidebarOpen ? "우측 사이드바 닫기" : "우측 사이드바 열기"}
+                                aria-label="우측 사이드바 토글"
+                            >
+                                {isRightSidebarOpen ? <PanelRightClose size={16} /> : <PanelRight size={16} />}
+                            </button>
+                        )}
                     </>
                 )}
             </div>

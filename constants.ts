@@ -1,6 +1,6 @@
 import { FileSystemNode, TagColor } from "./types";
 
-export const APP_VERSION = '0.1.0';
+export const APP_VERSION = '0.1.2';
 
 export const INITIAL_CONTENT = `# Welcome to NoteSpace!
 

@@ -21,6 +21,7 @@ export interface AiRequest {
   files?: Attachment[];
   endpointId?: string | number;
   model?: string;
+  systemInstruction?: string;
 }
 
 export type AiApplyMode = 'insert' | 'codeBlock' | 'replaceSection';
@@ -103,7 +104,7 @@ export const requestAi = async (req: AiRequest): Promise<AiOutcome> => {
 
   let res;
   try {
-    res = await generateNoteContentViaProxy(prompt, contextContent, req.files ?? [], req.endpointId, req.model);
+    res = await generateNoteContentViaProxy(prompt, contextContent, req.files ?? [], req.endpointId, req.model, req.systemInstruction);
   } catch (e: any) {
     return { status: 'error', pill: aiErrorPill(), error: e?.message };
   }
@@ -138,7 +139,7 @@ export const requestAi = async (req: AiRequest): Promise<AiOutcome> => {
 const forwardLegacySummary = async (req: AiRequest, prompt: string): Promise<AiOutcome> => {
   let res;
   try {
-    res = await generateNoteContentViaProxy(prompt, req.contextContent ?? '', req.files ?? [], req.endpointId, req.model);
+    res = await generateNoteContentViaProxy(prompt, req.contextContent ?? '', req.files ?? [], req.endpointId, req.model, req.systemInstruction);
   } catch (e: any) {
     return { status: 'error', pill: aiErrorPill(), error: e?.message };
   }

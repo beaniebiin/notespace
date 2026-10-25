@@ -332,19 +332,32 @@ export const localFileAdapter = {
    */
   getAllFiles: async (): Promise<Array<{ path: string; content: string }>> => {
     if (isTauriEnvironment()) {
-      // In Tauri, recursive directory walk could be used, or list standard hierarchy/trash/notes
       const results: Array<{ path: string; content: string }> = [];
-      const tree = await localFileAdapter.readTextFile('hierarchy.json');
+
+      // 1. 핵심 메타데이터 3종 병렬 로드
+      const [tree, trash, settings] = await Promise.all([
+        localFileAdapter.readTextFile('hierarchy.json'),
+        localFileAdapter.readTextFile('trash.json'),
+        localFileAdapter.readTextFile('settings.json'),
+      ]);
       if (tree) results.push({ path: 'hierarchy.json', content: tree });
-      const trash = await localFileAdapter.readTextFile('trash.json');
       if (trash) results.push({ path: 'trash.json', content: trash });
-      const settings = await localFileAdapter.readTextFile('settings.json');
       if (settings) results.push({ path: 'settings.json', content: settings });
 
+      // 2. 노트 파일 청크(30개 단위) 병렬 읽기 (OS 파일 핸들 한도 방어 및 I/O 가속)
       const noteFiles = await localFileAdapter.listFiles('notes');
-      for (const nf of noteFiles) {
-        const text = await localFileAdapter.readTextFile(`notes/${nf}`);
-        if (text !== null) results.push({ path: `notes/${nf}`, content: text });
+      const CHUNK_SIZE = 30;
+      for (let i = 0; i < noteFiles.length; i += CHUNK_SIZE) {
+        const chunk = noteFiles.slice(i, i + CHUNK_SIZE);
+        const chunkResults = await Promise.all(
+          chunk.map(async (nf) => {
+            const text = await localFileAdapter.readTextFile(`notes/${nf}`);
+            return text !== null ? { path: `notes/${nf}`, content: text } : null;
+          })
+        );
+        for (const item of chunkResults) {
+          if (item) results.push(item);
+        }
       }
       return results;
     }

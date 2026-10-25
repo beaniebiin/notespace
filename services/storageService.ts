@@ -173,9 +173,9 @@ export const storageService = {
           if (snapshots.length > 20) {
             snapshots.sort();
             const toDelete = snapshots.slice(0, snapshots.length - 20);
-            for (const f of toDelete) {
-              await localFileAdapter.removeFile(`snapshots/${id}/${f}`);
-            }
+            await Promise.allSettled(
+              toDelete.map((f) => localFileAdapter.removeFile(`snapshots/${id}/${f}`))
+            );
           }
         }
       }
@@ -206,10 +206,12 @@ export const storageService = {
       await localFileAdapter.removeFile(`notes/${id}.md`);
       noteContentsCache.delete(id);
 
-      // Clean snapshots
+      // Clean snapshots in parallel
       const snapshots = await localFileAdapter.listFiles(`snapshots/${id}`);
-      for (const s of snapshots) {
-        await localFileAdapter.removeFile(`snapshots/${id}/${s}`);
+      if (snapshots.length > 0) {
+        await Promise.allSettled(
+          snapshots.map((s) => localFileAdapter.removeFile(`snapshots/${id}/${s}`))
+        );
       }
     } catch (e) {
       console.error(`Failed to delete content for note ${id}:`, e);

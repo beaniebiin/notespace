@@ -55,12 +55,23 @@ export interface StickyTocProps {
   title?: string;
   onNavigate: (id: string) => void;
   activeId?: string | null;
+  className?: string;
+  containerClassName?: string;
+  hideCollapseButton?: boolean;
 }
 
 // 5-step cycle: H1 펼치기 -> H2 펼치기 -> 모두 펼치기 -> H2 접기 (H1만 남기기) -> H1 접기
 type CycleStep = 'ALL_EXPANDED' | 'H2_COLLAPSED' | 'H1_COLLAPSED' | 'H1_EXPANDED' | 'H2_EXPANDED';
 
-export const DesktopStickyToc: React.FC<StickyTocProps> = ({ headings, title, onNavigate, activeId }) => {
+export const DesktopStickyToc: React.FC<StickyTocProps> = ({
+  headings,
+  title,
+  onNavigate,
+  activeId,
+  className = '',
+  containerClassName,
+  hideCollapseButton = false,
+}) => {
   if (!headings || headings.length === 0) return null;
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -288,7 +299,7 @@ export const DesktopStickyToc: React.FC<StickyTocProps> = ({ headings, title, on
   };
 
   // If the whole TOC panel is minimized: Icon button only, no text label
-  if (isPanelCollapsed) {
+  if (isPanelCollapsed && !hideCollapseButton) {
     return (
       <aside className="no-print select-none shrink-0" aria-label="목차">
         <button
@@ -306,10 +317,10 @@ export const DesktopStickyToc: React.FC<StickyTocProps> = ({ headings, title, on
   const cycleButtonProps = getCycleButtonProps();
 
   return (
-    <aside className="w-48 xl:w-56 shrink-0 no-print select-none transition-all duration-200" aria-label="목차">
+    <aside className={className || "w-48 xl:w-56 shrink-0 no-print select-none transition-all duration-200"} aria-label="목차">
       <div
         ref={containerRef}
-        className="max-h-[calc(100vh-140px)] overflow-y-auto pr-1 text-xs scroll-smooth bg-white/50 dark:bg-gray-900/50 backdrop-blur-xs p-2 rounded-xl border border-gray-100 dark:border-gray-800/80 shadow-xs"
+        className={containerClassName || "max-h-[calc(100vh-140px)] overflow-y-auto pr-1 text-xs scroll-smooth bg-white/50 dark:bg-gray-900/50 backdrop-blur-xs p-2 rounded-xl border border-gray-100 dark:border-gray-800/80 shadow-xs"}
       >
         {/* Header with Title and Global Actions */}
         <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-gray-100 dark:border-gray-800">
@@ -332,14 +343,16 @@ export const DesktopStickyToc: React.FC<StickyTocProps> = ({ headings, title, on
             >
               {cycleButtonProps.icon}
             </button>
-            <button
-              type="button"
-              onClick={() => setIsPanelCollapsed(true)}
-              className="p-1 rounded text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer"
-              title="우측 목차 숨기기"
-            >
-              <ChevronRight size={13} />
-            </button>
+            {!hideCollapseButton && (
+              <button
+                type="button"
+                onClick={() => setIsPanelCollapsed(true)}
+                className="p-1 rounded text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+                title="우측 목차 숨기기"
+              >
+                <ChevronRight size={13} />
+              </button>
+            )}
           </div>
         </div>
 
